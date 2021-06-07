@@ -1,0 +1,70 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    @foreach (var product in Model.Products)
+    {
+        <div class="col">
+            <div class="card">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                    <p class="card-text">
+                        This is a longer card with supporting text below as a natural lead-in to additional content.
+                        This content is a little bit longer.
+                    </p>
+                    @{ if (User.Identity.IsAuthenticated)
+                        {
+                            <button type="button" onclick="addOneToCart(event)" id="@product.Id" data-product-id="@product.Id" data-user-id="@User.Identity.Name" class="btn btn-success">Add To Cart</button>
+                        }
+                        else
+                        {
+
+                            if (product.IsInCart == true)
+                            {
+                                <button type="button" onclick="addOneToCart(event)" disabled id="@product.Id" data-product-id="@product.Id" class="btn btn-success">Add To Cart</button>
+                            }
+                            else
+                            {
+                                <button type="button" onclick="addOneToCart(event)" id="@product.Id" data-product-id="@product.Id" class="btn btn-success">Add To Cart</button>
+                            }
+                        }
+                    }
+
+                    <a href="#" class="btn btn-info">See Details</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section scripts {
+
+    <script>
+        var formData = {
+            "productId": "",
+            "qty": 0,
+            "value": 0,
+            "username":""
+        }
+        var addOneToCart = function (e) {
+
+            var productId = e.target.dataset.productId;
+            var userName = e.target.dataset.userId;
+            this.formData.productId = productId;
+            this.formData.username = userName;
+            axios.post("https://localhost:44347/api/Cart/addtocart", this.formData)
+                .then(res => {
+                    console.log(res.data);
+                    let button = document.getElementById(productId);
+                    button.disabled = true;
+                })
+                .catch(err => {
+                    alert(err.error);
+                })
+        }
+    </script>
+}

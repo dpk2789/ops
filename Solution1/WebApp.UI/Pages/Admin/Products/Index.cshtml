@@ -1,0 +1,45 @@
+﻿@page
+@model WebApp.UI.Pages.Products.IndexModel
+@{
+}
+<h1>Admin</h1>
+
+<div id="app" class="container">
+    <div v-if="!editing">
+        <a class="button" href="/admin/products/add">Add New Product</a>      
+        <table class="table">
+            <tr>
+                <th>Id</th>
+                <th>Product</th>
+                <th>Value</th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tbody>
+                @foreach (var product in Model.Products)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => product.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => product.Value)
+                        </td>
+
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@product.Id" class="fa fa-edit">Edit</a> |
+                            @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+                            <a asp-action="Delete" asp-route-id="@product.Id" class="fa fa-trash">Delete</a>
+                            <a asp-action="AddToSession" asp-controller="UserAccount" asp-route-id="@product.Id" class="fa fa-edit">Add To Cart</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>           
+        </table>
+    </div>
+</div>
+
+
+@section scripts{
+    @*<script src="~/js/product.js"></script>*@
+}

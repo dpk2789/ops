@@ -1,0 +1,31 @@
+﻿@page
+@model WebApp.UI.Pages.Products.AddModel
+@{
+}
+
+
+<form method="post">
+    <h4>Add New Product</h4>
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3 row">
+        <label asp-for="Input.Name" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-6">
+            <input asp-for="Input.Name" class="form-control" />
+        </div>
+        <span asp-validation-for="Input.Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3 row">
+        <label asp-for="Input.Value" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-6">
+            <input asp-for="Input.Value" class="form-control" />
+        </div>
+        <span asp-validation-for="Input.Value" class="text-danger"></span>
+    </div>
+
+    <div class="d-grid gap-2 d-md-flex offset-6">
+        <button class="btn btn-primary me-md-2" type="button">Cancel</button>
+        <button type="submit" class="btn btn-primary">Add Product</button>
+    </div>
+  
+</form>
