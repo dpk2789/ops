@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Aow.Context\Aow.Context.csproj" />
-    <ProjectReference Include="..\WebApp.Identity\WebApp.Application\Aow.Application.csproj" />
+    <ProjectReference Include="..\WebApp.Application\Aow.Application.csproj" />
   </ItemGroup>
 
 
