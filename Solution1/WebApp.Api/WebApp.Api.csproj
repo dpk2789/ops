@@ -18,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Aow.Context\Aow.Context.csproj" />
-    <ProjectReference Include="..\WebApp.Application\Aow.Application.csproj" />
+    <ProjectReference Include="..\Aow.Context\OnlineShop.Context.csproj" />
+    <ProjectReference Include="..\WebApp.Application\OnlineShop.Application.csproj" />
   </ItemGroup>
 
 

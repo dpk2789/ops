@@ -19,23 +19,23 @@ namespace Aow.Application.Cart
         {
             public Guid ProductId { get; set; }
             public int Qty { get; set; }
-            public decimal Value { get; set; }
-            public string UserName { get; set; }
+            public decimal? Value { get; set; }
+            public string UserId { get; set; }
         }
 
         public async Task<bool> Do(AddToCartRequest request)
         {
-            // service responsibility          
-
+            // service responsibility           
+            
             var cartProduct = new CartProduct()
             {
                 ProductId = request.ProductId,
                 Qty = request.Qty,
-                Value = request.Value,
-                UserId= request.UserName
+                Value = request.Value.Value,
+                UserId = request.UserId
             };
 
-            var success = await _cartRepository.CreateCart(cartProduct) > 0;
+            var success = await _cartRepository.AddOneToCart(request.ProductId , request.Qty , request.UserId) > 0;
             if (success)
             {
                 return true;

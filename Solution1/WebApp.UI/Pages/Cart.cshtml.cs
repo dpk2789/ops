@@ -1,7 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using WebApp.UI.Models;
 
 namespace WebApp.UI.Pages
@@ -15,30 +20,37 @@ namespace WebApp.UI.Pages
             _sessionManager = sessionManager;
         }
 
-        public IEnumerable<CartResponse> CartList { get; set; }
-        public class CartResponse
-        {
-            public string Name { get; set; }
-            public string Value { get; set; }
-            public decimal RealValue { get; set; }
-            public int Qty { get; set; }
-            public Guid ProductId { get; set; }
-        }
+        public IEnumerable<CartViewModel> CartList { get; set; }       
 
-        public IActionResult OnGet()
+        public  async Task<IActionResult> OnGet()
         {
-            var list = _sessionManager
-                .GetCart(x => new CartResponse
-                {
-                    Name = x.ProductName,
-                    Value = x.Value.ToString(),
-                    RealValue = x.Value,
-                    ProductId = x.ProductId,
-                    Qty = x.Qty
-                });
+            //var list = _sessionManager
+            //    .GetCart(x => new CartResponse
+            //    {
+            //        Name = x.ProductName,
+            //        Value = x.Value.ToString(),
+            //        RealValue = x.Value,
+            //        ProductId = x.ProductId,
+            //        Qty = x.Qty
+            //    });
 
-            CartList = list;
-            return Page();
+            //CartList = list;
+
+            using (var client = new HttpClient())
+            {
+                //HTTP get user info
+                Uri cartListUri = new Uri("https://localhost:44347/api/Cart/GetCartItems/?userId=" + User.Identity.Name);
+
+                var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
+
+                var getUserInfo = await client.GetAsync(cartListUri);
+
+                string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                var data = JsonConvert.DeserializeObject<IEnumerable<CartViewModel>>(resultuerinfo);
+                CartList = data;
+                return Page();
+            }            
         }
     }
 }
