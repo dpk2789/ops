@@ -15,7 +15,7 @@ namespace WebApp.UI.Controllers
 {
     public class UserAccountController : Controller
     {
-        private ISessionManager _sessionManager;
+        private readonly ISessionManager _sessionManager;
 
         public UserAccountController(ISessionManager sessionManager)
         {
@@ -36,9 +36,9 @@ namespace WebApp.UI.Controllers
         }
 
 
-        public void AddProductToCart(Guid Id)
+        public void AddProductToCart(Guid id)
         {
-            _sessionManager.AddProductToSession(Id);
+            _sessionManager.AddProductToSession(id);
         }
 
         [HttpGet]
@@ -47,17 +47,16 @@ namespace WebApp.UI.Controllers
             using (var client = new HttpClient())
             {
                 //HTTP get user info
-                Uri cartListUri = new Uri("https://localhost:44347/api/Cart/GetCartItems/?userId=" + User.Identity.Name);
+                var cartListUri = new Uri("https://localhost:44347/api/Cart/GetCartItems/?userId=" + User.Identity.Name);
 
-                var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
+                var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault()?.Value;
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
 
                 var getUserInfo = await client.GetAsync(cartListUri);
 
                 string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 var data = JsonConvert.DeserializeObject<IEnumerable<CartViewModel>>(resultuerinfo);
-                IEnumerable<CartViewModel> CartList;
-                CartList = data;
+                var CartList = data;
                 return PartialView("_CartPartial", CartList);
             }
             

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using WebApp.UI.Helpers;
 using WebApp.UI.Models;
 
 namespace WebApp.UI.Pages
@@ -20,9 +21,9 @@ namespace WebApp.UI.Pages
             _sessionManager = sessionManager;
         }
 
-        public IEnumerable<CartViewModel> CartList { get; set; }       
+        public IEnumerable<CartViewModel> CartList { get; set; }
 
-        public  async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGet()
         {
             //var list = _sessionManager
             //    .GetCart(x => new CartResponse
@@ -39,7 +40,7 @@ namespace WebApp.UI.Pages
             using (var client = new HttpClient())
             {
                 //HTTP get user info
-                Uri cartListUri = new Uri("https://localhost:44347/api/Cart/GetCartItems/?userId=" + User.Identity.Name);
+                Uri cartListUri = new Uri(ApiUrls.Cart.GetCartItems + "/?userId=" + User.Identity.Name);
 
                 var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
@@ -50,7 +51,7 @@ namespace WebApp.UI.Pages
                 var data = JsonConvert.DeserializeObject<IEnumerable<CartViewModel>>(resultuerinfo);
                 CartList = data;
                 return Page();
-            }            
+            }
         }
     }
 }

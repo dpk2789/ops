@@ -89,7 +89,7 @@ namespace WebApp.RazorPages.Areas.Identity.Pages.Account
 
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.token);
                     //HTTP get user info
-                    Uri userinfo = new Uri("https://localhost:44347/weatherforecast");
+                    Uri userinfo = new Uri("http://api.robustpackagingeshop.com/weatherforecast");
                     var getUserInfo = await client.GetAsync(userinfo);
 
 

@@ -28,17 +28,14 @@ namespace WebApp.UI.Pages.Products
         public async Task OnGet()
         {
             using (var client = new HttpClient())
-            {               
-
-                //HTTP get user info
-                Uri getProducts = new Uri("https://localhost:44347/api/Products/GetProducts");
+            {                
+                Uri getProductsUri = new Uri(ApiUrls.Product.GetProducts);
 
                 var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
 
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
-                //HTTP get user info
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);              
 
-                var getUserInfo = await client.GetAsync(getProducts);
+                var getUserInfo = await client.GetAsync(getProductsUri);
 
                 string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 var data = JsonConvert.DeserializeObject<IEnumerable<ProductViewModel>>(resultuerinfo);

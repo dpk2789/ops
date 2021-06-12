@@ -45,16 +45,11 @@ namespace WebApp.UI.Pages
                   Name = x.ProductName,
                   Value = x.Value,
                   Id = x.ProductId,
-              });
+              });             
+             
+                Uri getProductsUri = new Uri(ApiUrls.Product.GetProducts);              
 
-                Uri u = new Uri(IdentityUrls.Identity.Login);
-
-                //HTTP get user info
-                Uri userinfo = new Uri("https://localhost:44347/api/Products/GetProducts");
-
-                //HTTP get user info
-
-                var getUserInfo = await client.GetAsync(userinfo);
+                var getUserInfo = await client.GetAsync(getProductsUri);
 
                 string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 var data = JsonConvert.DeserializeObject<IEnumerable<ProductViewModel>>(resultuerinfo);
