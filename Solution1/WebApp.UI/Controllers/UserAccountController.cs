@@ -44,22 +44,19 @@ namespace WebApp.UI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCartPartialView()
         {
-            using (var client = new HttpClient())
-            {
-                //HTTP get user info
-                var cartListUri = new Uri("https://localhost:44347/api/Cart/GetCartItems/?userId=" + User.Identity.Name);
+            using var client = new HttpClient();
+            //HTTP get user info
+            var cartListUri = new Uri("https://localhost:44347/api/Cart/GetCartItems/?userId=" + User.Identity.Name);
 
-                var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault()?.Value;
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
+            var userAccessToken = User.Claims.FirstOrDefault(x => x.Type == "AcessToken")?.Value;
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
 
-                var getUserInfo = await client.GetAsync(cartListUri);
+            var getUserInfo = await client.GetAsync(cartListUri);
 
-                string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                var data = JsonConvert.DeserializeObject<IEnumerable<CartViewModel>>(resultuerinfo);
-                var CartList = data;
-                return PartialView("_CartPartial", CartList);
-            }
-            
+            string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var data = JsonConvert.DeserializeObject<IEnumerable<CartViewModel>>(resultuerinfo);
+            var CartList = data;
+            return PartialView("_CartPartial", CartList);
         }
     }
 }

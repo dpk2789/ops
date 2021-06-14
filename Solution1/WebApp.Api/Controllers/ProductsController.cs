@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
+using WebApp.Api.Models.Response;
 
 namespace WebApp.Api.Controllers
 {
@@ -16,38 +17,52 @@ namespace WebApp.Api.Controllers
             Ok(getProducts.Do());
 
 
-        [HttpGet("api/Products/{id}")]
+        [HttpGet("api/Products/GetProduct")]
         public IActionResult GetProduct(Guid id,
            [FromServices] GetProduct getProduct) =>
            Ok(getProduct.Do(id));
 
         [Authorize]
         [HttpPost("api/Products/CreateProduct")]
-        public async Task<IActionResult> CreateProduct(
-            [FromBody] CreateProduct.CreateRequest request,
-            [FromServices] CreateProduct createProduct) =>
-            Ok((await createProduct.Do(request)));
-
-        [Authorize]
-        [HttpPut("api/Products/{id}")]
-        public async Task<IActionResult> PutCompany(Guid id, [FromBody] UpdateProduct.Request request, [FromServices] UpdateProduct updateProduct)
+        public async Task<IActionResult> CreateProduct([FromBody] CreateProduct.CreateRequest request, [FromServices] CreateProduct createProduct)
         {
-            if (id != request.Id)
-            {
-                return BadRequest();
-            }
-
             try
             {
-                
-                Ok((await updateProduct.Do(request)));
+                var response = await createProduct.Do(request);
+                return Ok(new ApiResponse
+                {
+                    Msg = "Successfully added !!",
+                    Success = true
+                });
+
             }
             catch (DbUpdateConcurrencyException)
             {
+                return BadRequest();
+            }
+        }
+
+
+        [Authorize]
+        [HttpPut("api/Products/UpdateProduct")]
+        public async Task<IActionResult> UpdateProduct([FromBody] UpdateProduct.Request request, [FromServices] UpdateProduct updateProduct)
+        {
+            try
+            {
+                var response = await updateProduct.Do(request);
+                return Ok(new UpdateProduct.Response
+                {
+                    Id= response.Id,
+                    Name= response.Name,
+                    Description = response.Description,
+                    Value= response.Value
+                });
 
             }
-
-            return NoContent();
+            catch (DbUpdateConcurrencyException)
+            {
+                return BadRequest();
+            }
         }
 
         [Authorize]

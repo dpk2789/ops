@@ -6,7 +6,7 @@
 
 <div id="app" class="container">
     <div v-if="!editing">
-        <a class="button" href="/admin/products/add">Add New Product</a>      
+        <a class="button" asp-page="/Admin/Products/Add">Add New Product</a>      
         <table class="table">
             <tr>
                 <th>Id</th>
@@ -27,7 +27,7 @@
                         </td>
 
                         <td>
-                            <a asp-action="Edit" asp-route-id="@product.Id" class="fa fa-edit">Edit</a> |
+                            <a  asp-route-id="@product.Id" asp-page="/Admin/Products/Update" class="fa fa-edit">Edit</a> |
                             @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
                             <a asp-action="Delete" asp-route-id="@product.Id" class="fa fa-trash">Delete</a>
                             <a asp-action="AddToSession" asp-controller="UserAccount" asp-route-id="@product.Id" class="fa fa-edit">Add To Cart</a>

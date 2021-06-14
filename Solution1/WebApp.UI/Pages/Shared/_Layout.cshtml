@@ -23,8 +23,6 @@
                         </li>
                         @if (Context.User.Identity.IsAuthenticated)
                         {
-                            var userclaim = Context.User.Claims.Where(x => x.Type == "UserRoleClaim").FirstOrDefault().Value;
-
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-page="Admin/Products/Index">Products</a>
                             </li>

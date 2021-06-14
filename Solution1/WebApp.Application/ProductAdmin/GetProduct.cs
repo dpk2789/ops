@@ -3,6 +3,7 @@ using System;
 
 namespace Aow.Application.ProductAdmin
 {
+    [Service]
     public class GetProduct
     {
         private IProductRepository _productManager;

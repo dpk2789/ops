@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace Aow.Application.ProductAdmin
 {
+    [Service]
     public class CreateProduct
     {
         private IProductRepository _productManager;

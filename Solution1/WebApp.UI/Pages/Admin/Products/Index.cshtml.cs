@@ -29,7 +29,7 @@ namespace WebApp.UI.Pages.Products
         {
             using (var client = new HttpClient())
             {                
-                Uri getProductsUri = new Uri(ApiUrls.Product.GetProducts);
+                var getProductsUri = new Uri(ApiUrls.Product.GetProducts);
 
                 var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
 

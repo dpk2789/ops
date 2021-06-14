@@ -33,7 +33,7 @@ namespace WebApp.UI.Pages.Account
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public string ReturnUrl { get; set; }
+        public string ReturnUrl { get; private set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
@@ -66,7 +66,7 @@ namespace WebApp.UI.Pages.Account
             returnUrl ??= Url.Content("~/");
             if (!ModelState.IsValid) return Page();
             using var client = new HttpClient();
-            Uri u = new Uri(IdentityUrls.Identity.Register);
+            var u = new Uri(IdentityUrls.Identity.Register);
 
             var json = JsonConvert.SerializeObject(new { Input.Email, Input.Password , Input.ConfirmPassword });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -79,25 +79,22 @@ namespace WebApp.UI.Pages.Account
                  
             var callbackUrl = Url.ActionLink(
                 "/Account/ConfirmEmail",
-                values: new { userId = data.UserId, code = data.Msg, returnUrl = returnUrl },
+                values: new { userId = data.UserId, code = data.Msg, returnUrl },
                 protocol: Request.Scheme);
 
             await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                 $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-            if (data.Success == true)
+            if (data.Success)
             {
                 return RedirectToPage("RegisterConfirmation", new { email = Input.Email });
             }
-            else
-            {
-                foreach (var error in data.ErrorMessages)
-                {
-                    ModelState.AddModelError(string.Empty, error);
-                }
-                return Page();
-            }
 
+            foreach (var error in data.ErrorMessages)
+            {
+                ModelState.AddModelError(string.Empty, error);
+            }
+            return Page();
             // If we got this far, something failed, redisplay form
         }
     }
