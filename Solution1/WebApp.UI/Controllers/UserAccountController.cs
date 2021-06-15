@@ -9,7 +9,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using WebApp.UI.Helpers;
 using WebApp.UI.Models;
+using static WebApp.UI.Pages.Products.IndexModel;
 
 namespace WebApp.UI.Controllers
 {
@@ -35,7 +37,6 @@ namespace WebApp.UI.Controllers
             return RedirectToPage("/Index");
         }
 
-
         public void AddProductToCart(Guid id)
         {
             _sessionManager.AddProductToSession(id);
@@ -57,6 +58,24 @@ namespace WebApp.UI.Controllers
             var data = JsonConvert.DeserializeObject<IEnumerable<CartViewModel>>(resultuerinfo);
             var CartList = data;
             return PartialView("_CartPartial", CartList);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetAdminProductsPartialView()
+        {
+            using var client = new HttpClient();
+            var getProductsUri = new Uri(ApiUrls.Product.GetProducts);
+
+            var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
+
+            var getUserInfo = await client.GetAsync(getProductsUri);
+
+            string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var data = JsonConvert.DeserializeObject<IEnumerable<ProductViewModel>>(resultuerinfo);          
+            return PartialView("_AdminProductsPartial", data);
         }
     }
 }

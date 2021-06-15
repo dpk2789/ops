@@ -17,7 +17,8 @@ namespace WebApp.UI.Pages.Products
         public IEnumerable<ProductViewModel> Products { get; set; }
 
         [BindProperty]
-        public ProductViewModel CartViewModel { get; set; }
+        public ProductViewModel AdminProductViewModel { get; set; }
+       
         public class ProductViewModel
         {
             public Guid Id { get; set; }
@@ -43,11 +44,11 @@ namespace WebApp.UI.Pages.Products
             }
         }
 
-        public async Task<IActionResult> OnPost()
-        {
-            var currentId = HttpContext.Session.GetString("id");
-            HttpContext.Session.SetString("id", CartViewModel.Id.ToString());
-            return Page();
-        }
+        //public async Task<IActionResult> OnPost()
+        //{
+        //    var currentId = HttpContext.Session.GetString("id");
+        //    HttpContext.Session.SetString("id", CartViewModel.Id.ToString());
+        //    return Page();
+        //}
     }
 }

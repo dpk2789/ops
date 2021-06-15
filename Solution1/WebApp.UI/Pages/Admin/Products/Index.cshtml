@@ -1,45 +1,118 @@
 ﻿@page
 @model WebApp.UI.Pages.Products.IndexModel
 @{
+    var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
 }
+
 <h1>Admin</h1>
+<style>
+    .loading-indicator:before {
+        content: '';
+        background: #000000cc;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+    }
+
+    .loading-indicator:after {
+        content: 'Loading';
+        position: fixed;
+        width: 100%;
+        top: 50%;
+        left: 0;
+        z-index: 1001;
+        color: white;
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+</style>
 
 <div id="app" class="container">
     <div v-if="!editing">
-        <a class="button" asp-page="/Admin/Products/Add">Add New Product</a>      
-        <table class="table">
-            <tr>
-                <th>Id</th>
-                <th>Product</th>
-                <th>Value</th>
-                <th></th>
-                <th></th>
-            </tr>
-            <tbody>
-                @foreach (var product in Model.Products)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => product.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => product.Value)
-                        </td>
-
-                        <td>
-                            <a  asp-route-id="@product.Id" asp-page="/Admin/Products/Update" class="fa fa-edit">Edit</a> |
-                            @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
-                            <a asp-action="Delete" asp-route-id="@product.Id" class="fa fa-trash">Delete</a>
-                            <a asp-action="AddToSession" asp-controller="UserAccount" asp-route-id="@product.Id" class="fa fa-edit">Add To Cart</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>           
-        </table>
+        <a class="button" asp-page="/Admin/Products/Add">Add New Product</a>
+        <input type="hidden" value="@userId" id="userId" />
+        <div class="row">
+            <partial name="_AdminProductsPartial" model="@Model.Products" />
+        </div>
     </div>
 </div>
 
 
 @section scripts{
     @*<script src="~/js/product.js"></script>*@
+    <script>
+        axios.interceptors.request.use(function (config) {
+
+            // spinning start to show
+            // UPDATE: Add this code to show global loading indicator
+            document.body.classList.add('loading-indicator');
+
+
+            return config
+        }, function (error) {
+            return Promise.reject(error);
+        });
+
+        axios.interceptors.response.use(function (response) {
+
+            // spinning hide
+            // UPDATE: Add this code to hide global loading indicator
+            document.body.classList.remove('loading-indicator');
+
+            return response;
+        }, function (error) {
+            return Promise.reject(error);
+        });
+
+
+        function confirmAction(e) {
+            let confirmAction = confirm("Are you sure to delete this product?");
+            if (confirmAction) {
+                //  alert("Action successfully executed");
+                removeProduct(e);
+            } else {
+                alert("Action canceled");
+            }
+        }
+
+        var getProducts = function () {
+            axios.get('/UserAccount/GetAdminProductsPartialView')
+                .then(res => {
+                    var html = res.data;
+                    var el = document.getElementById('product-main');
+
+                    el.outerHTML = html;
+                })
+        }
+
+        var removeProduct = function (e) {
+            var productId = e.target.dataset.productId;
+            var el = document.getElementById('userId');
+            var userAccessToken = el.value;
+            console.log(userAccessToken);
+
+
+            axios.delete("https://localhost:44347/api/Products/DeleteProduct?id=" + productId, {
+                headers: {
+                    Authorization: "Bearer " + userAccessToken
+                }
+            })
+                .then(res => {
+                    console.log(res);
+                    if (res.data.success) {
+                        alert(res.data.msg)
+                    }
+                    getProducts();
+                })
+                .catch(err => {
+                    alert(err.error);
+                })
+
+        }
+
+    </script>
 }

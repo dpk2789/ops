@@ -52,10 +52,10 @@ namespace WebApp.Api.Controllers
                 var response = await updateProduct.Do(request);
                 return Ok(new UpdateProduct.Response
                 {
-                    Id= response.Id,
-                    Name= response.Name,
+                    Id = response.Id,
+                    Name = response.Name,
                     Description = response.Description,
-                    Value= response.Value
+                    Value = response.Value
                 });
 
             }
@@ -66,11 +66,21 @@ namespace WebApp.Api.Controllers
         }
 
         [Authorize]
-        [HttpDelete("api/Products/{id}")]
-        public async Task<IActionResult> DeleteProduct(
-            Guid id,
-            [FromServices] DeleteProduct deleteProduct) =>
-            Ok((await deleteProduct.Do(id)));
+        [HttpDelete("api/Products/DeleteProduct")]
+        public async Task<IActionResult> DeleteProduct(Guid id, [FromServices] DeleteProduct deleteProduct)
+        {
+            var result = await deleteProduct.Do(id);
+            if (result > 0)
+            {
+                return Ok(new ApiResponse
+                {
+                    Msg = "Successfully Deleted !!",
+                    Success = true
+                });
+            }
+            return BadRequest();
+        }
+
 
     }
 }
