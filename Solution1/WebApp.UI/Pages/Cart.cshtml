@@ -9,7 +9,7 @@
     </div>
 </div>
 
-@section scripts {    
+@section scripts {
 
     <script>
         var formData = {
@@ -18,14 +18,16 @@
             "value": 0,
             "userId": ""
         }
-        var addOneToCart = function (e) {          
+        //var apiUrl = "https://localhost:44347";
+        var apiUrl = "http://api.robustpackagingeshop.com";
+        var addOneToCart = function (e) {
 
             var productId = e.target.dataset.productId;
             var userName = e.target.dataset.userId;
             this.formData.productId = productId;
             this.formData.userid = userName;
 
-            axios.post("https://localhost:44347/api/Cart/AddOneToCart", this.formData)
+            axios.post(apiUrl + "/api/Cart/AddOneToCart", this.formData)
                 .then(res => {
                     console.log(res.data);
                     updateCart();
@@ -35,7 +37,7 @@
                 })
         }
 
-        var updateCart = function () {          
+        var updateCart = function () {
 
             axios.get('/UserAccount/GetCartPartialView')
                 .then(res => {
@@ -45,7 +47,7 @@
                     el.outerHTML = html;
                 })
         }
-     
+
         var removeFromCart = function (e) {
 
             var productId = e.target.dataset.productId;
@@ -53,7 +55,7 @@
             this.formData.productId = productId;
             this.formData.userid = userName;
 
-            axios.post("https://localhost:44347/api/Cart/RemoveProduct", this.formData)
+            axios.post(apiUrl + "/api/Cart/RemoveProduct", this.formData)
                 .then(res => {
                     updateCart();
                 })

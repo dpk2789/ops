@@ -44,19 +44,20 @@
 @section scripts {
 
     <script>
-        const formData = {
+        var formData = {
             "productId": "",
             "qty": 1,
             "value": 0,
-            "username":""
+            "userId": ""
         };
+        //  var apiUrl = "https://localhost:44347";
+        var apiUrl = "http://api.robustpackagingeshop.com";
         const addOneToCart = function (e) {
-
-            const productId = e.target.dataset.productId;
-            const userName = e.target.dataset.userId;
+            let productId = e.target.dataset.productId;
+            let userName = e.target.dataset.userId;
             this.formData.productId = productId;
-            this.formData.username = userName;
-            axios.post("https://localhost:44347/api/Cart/addtocart", this.formData)
+            this.formData.userId = userName;
+            axios.post(apiUrl + "/api/Cart/addtocart", this.formData)
                 .then(res => {
                     console.log(res.data);
                     let button = document.getElementById(productId);

@@ -47,7 +47,7 @@ namespace WebApp.UI.Controllers
         {
             using var client = new HttpClient();
             //HTTP get user info
-            var cartListUri = new Uri("https://localhost:44347/api/Cart/GetCartItems/?userId=" + User.Identity.Name);
+            var cartListUri = new Uri(ApiUrls.Cart.GetCartItems + "/?userId=" + User.Identity.Name);
 
             var userAccessToken = User.Claims.FirstOrDefault(x => x.Type == "AcessToken")?.Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
@@ -74,7 +74,7 @@ namespace WebApp.UI.Controllers
             var getUserInfo = await client.GetAsync(getProductsUri);
 
             string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            var data = JsonConvert.DeserializeObject<IEnumerable<ProductViewModel>>(resultuerinfo);          
+            var data = JsonConvert.DeserializeObject<IEnumerable<ProductViewModel>>(resultuerinfo);
             return PartialView("_AdminProductsPartial", data);
         }
     }
