@@ -66,7 +66,7 @@ namespace WebApp.UI.Pages.Account
             returnUrl ??= Url.Content("~/");
             if (!ModelState.IsValid) return Page();
             using var client = new HttpClient();
-            var u = new Uri(IdentityUrls.Identity.Register);
+            var u = new Uri(ApiUrls.Identity.Register);
 
             var json = JsonConvert.SerializeObject(new { Input.Email, Input.Password , Input.ConfirmPassword });
             var content = new StringContent(json, Encoding.UTF8, "application/json");

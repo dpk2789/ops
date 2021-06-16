@@ -2,8 +2,8 @@
 {
     public static class ApiUrls
     {
-        public const string Rootlocal = "https://localhost:44347";
-       // public const string Rootlocal = "http://api.robustpackagingeshop.com";
+       // public const string Rootlocal = "https://localhost:44347";
+        public const string Rootlocal = "http://api.robustpackagingeshop.com";
        
         public static class Cart
         {
@@ -21,6 +21,12 @@
             public const string Create = Rootlocal + "/api/Products/CreateProduct";
             public const string Update = Rootlocal + "/api/Products/UpdateProduct";
             public const string Delete = Rootlocal + "/Products/{postId}";
+        }
+
+        public static class Identity
+        {
+            public const string Login = Rootlocal + "/api/user/login";
+            public const string Register = Rootlocal + "/api/user/register";
         }
 
     }

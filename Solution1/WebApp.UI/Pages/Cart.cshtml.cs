@@ -25,20 +25,9 @@ namespace WebApp.UI.Pages
 
         public async Task<IActionResult> OnGet()
         {
-            //var list = _sessionManager
-            //    .GetCart(x => new CartResponse
-            //    {
-            //        Name = x.ProductName,
-            //        Value = x.Value.ToString(),
-            //        RealValue = x.Value,
-            //        ProductId = x.ProductId,
-            //        Qty = x.Qty
-            //    });
-
-            //CartList = list;
-
-            using (var client = new HttpClient())
+            if (User.Identity.IsAuthenticated)
             {
+                using var client = new HttpClient();
                 //HTTP get user info
                 Uri cartListUri = new Uri(ApiUrls.Cart.GetCartItems + "/?userId=" + User.Identity.Name);
 
@@ -47,11 +36,26 @@ namespace WebApp.UI.Pages
 
                 var getUserInfo = await client.GetAsync(cartListUri);
 
-                string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                var resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 var data = JsonConvert.DeserializeObject<IEnumerable<CartViewModel>>(resultuerinfo);
                 CartList = data;
-                return Page();
             }
+            else
+            {
+                var list = _sessionManager
+                    .GetCart(x => new CartViewModel
+                    {
+                        Name = x.ProductName,
+                        Value = x.Value.ToString(),
+                        RealValue = x.Value,
+                        ProductId = x.ProductId,
+                        Qty = x.Qty
+                    });
+
+                CartList = list;
+            }
+            return Page();
+
         }
     }
 }

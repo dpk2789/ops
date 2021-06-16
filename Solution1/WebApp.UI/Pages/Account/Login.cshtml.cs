@@ -67,7 +67,7 @@ namespace WebApp.RazorPages.Areas.Identity.Pages.Account
             {
                 using (var client = new HttpClient())
                 {
-                    Uri u = new Uri(IdentityUrls.Identity.Login);
+                    Uri u = new Uri(ApiUrls.Identity.Login);
 
                     //var content = new FormUrlEncodedContent(new[]
                     //                {                                     
