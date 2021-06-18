@@ -6,7 +6,7 @@ namespace WebApp.UI.Models
     public interface ISessionManager
     {
         IEnumerable<TResult> GetCart<TResult>(Func<CartProductViewModel, TResult> selector);
-        void AddProductToSession(Guid Id);
+        void AddProductToSession(CartProductViewModel productViewModel);
         void RemoveProduct(Guid stockId, int qty);       
         void ClearCart();
     }

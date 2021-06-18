@@ -8,5 +8,9 @@ namespace WebApp.UI.Models
         public string ProductName { get; set; }
         public int Qty { get; set; }
         public decimal Value { get; set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        
     }
 }

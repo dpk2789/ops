@@ -45,10 +45,10 @@ namespace WebApp.UI.Pages
                 var list = _sessionManager
                     .GetCart(x => new CartViewModel
                     {
-                        Name = x.ProductName,
+                        Name = x.Name,
                         Value = x.Value.ToString(),
                         RealValue = x.Value,
-                        ProductId = x.ProductId,
+                        ProductId = x.Id,
                         Qty = x.Qty
                     });
 

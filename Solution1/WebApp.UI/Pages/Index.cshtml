@@ -25,11 +25,11 @@
 
                             if (product.IsInCart == true)
                             {
-                                <button type="button" onclick="addOneToCart(event)" disabled id="@product.Id" data-product-id="@product.Id" class="btn btn-success">Add To Cart</button>
+                                <button type="button" disabled id="@product.Id" data-product-id="@product.Id" class="btn btn-success">Add To Cart</button>
                             }
                             else
                             {
-                                <button type="button" onclick="addOneToCart(event)" id="@product.Id" data-product-id="@product.Id" class="btn btn-success">Add To Cart</button>
+                                <button type="button" onclick="addProductToCartSession(event)" id="@product.Id" data-product-id="@product.Id" class="btn btn-success">Add To Cart</button>
                             }
                         }
                     }
@@ -50,14 +50,29 @@
             "value": 0,
             "userId": ""
         };
-        //  var apiUrl = "https://localhost:44347";
-        var apiUrl = "http://api.robustpackagingeshop.com";
-        const addOneToCart = function (e) {
+        var apiUrl = "https://localhost:44347";
+        //var apiUrl = "http://api.robustpackagingeshop.com";
+        let addOneToCart = function (e) {
             let productId = e.target.dataset.productId;
             let userName = e.target.dataset.userId;
             this.formData.productId = productId;
             this.formData.userId = userName;
+            alert(productId);
             axios.post(apiUrl + "/api/Cart/addtocart", this.formData)
+                .then(res => {
+                    console.log(res.data);
+                    let button = document.getElementById(productId);
+                    button.disabled = true;
+                })
+                .catch(err => {
+                    alert(err.error);
+                })
+        };
+
+        let addProductToCartSession = function (e) {
+            let productId = e.target.dataset.productId;           
+            this.formData.productId = productId;           
+            axios.post("/UserAccount/AddProductToCartSession/?id=" + productId)
                 .then(res => {
                     console.log(res.data);
                     let button = document.getElementById(productId);

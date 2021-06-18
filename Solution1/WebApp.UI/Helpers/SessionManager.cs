@@ -28,12 +28,11 @@ namespace WebApp.UI.Helpers
             return cartList.Select(selector);
         }
 
-        public void AddProductToSession(Guid Id)
+        public void AddProductToSession(CartProductViewModel productViewModel)
         {
             //var currentId = HttpContext.Session.GetString("cart");
-            //HttpContext.Session.SetString("id", Id.ToString());
-            CartProductViewModel productViewModel = new CartProductViewModel();
-            productViewModel.ProductId = Id;
+            //HttpContext.Session.SetString("id", Id.ToString());           
+
             var cartList = new List<CartProductViewModel>();
             var stringObject = _session.GetString("cart");
 
@@ -41,9 +40,18 @@ namespace WebApp.UI.Helpers
             {
                 cartList = JsonConvert.DeserializeObject<List<CartProductViewModel>>(stringObject);
             }
-            cartList.Add(productViewModel);
-            stringObject = JsonConvert.SerializeObject(cartList);
 
+            if (cartList.Any(x => x.Id == productViewModel.Id))
+            {
+                var findproductViewModel = cartList.Find(x => x.Id == productViewModel.Id);
+                findproductViewModel.Qty = productViewModel.Qty + 1;
+            }
+            else
+            {
+                cartList.Add(productViewModel);
+            }
+
+            stringObject = JsonConvert.SerializeObject(cartList);
             _session.SetString("cart", stringObject);
         }
 

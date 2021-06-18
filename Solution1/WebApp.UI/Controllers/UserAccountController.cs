@@ -37,27 +37,47 @@ namespace WebApp.UI.Controllers
             return RedirectToPage("/Index");
         }
 
-        public void AddProductToCart(Guid id)
+        public async Task AddProductToCartSession(Guid id)
         {
-            _sessionManager.AddProductToSession(id);
+            using var client = new HttpClient();
+            var updateProductsUri = new Uri(ApiUrls.Product.GetProduct + "?id=" + id);
+            var postTask = await client.GetAsync(updateProductsUri);
+            var result = postTask.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var data = JsonConvert.DeserializeObject<CartProductViewModel>(result);
+            _sessionManager.AddProductToSession(data);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetCartPartialView()
         {
-            using var client = new HttpClient();
-            //HTTP get user info
-            var cartListUri = new Uri(ApiUrls.Cart.GetCartItems + "/?userId=" + User.Identity.Name);
 
-            var userAccessToken = User.Claims.FirstOrDefault(x => x.Type == "AcessToken")?.Value;
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
+            if (User.Identity.IsAuthenticated)
+            {
+                using var client = new HttpClient();
+                var cartListUri = new Uri(ApiUrls.Cart.GetCartItems + "/?userId=" + User.Identity.Name);
+                var userAccessToken = User.Claims.FirstOrDefault(x => x.Type == "AcessToken")?.Value;
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
 
-            var getUserInfo = await client.GetAsync(cartListUri);
+                var getUserInfo = await client.GetAsync(cartListUri);
 
-            string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            var data = JsonConvert.DeserializeObject<IEnumerable<CartViewModel>>(resultuerinfo);
-            var CartList = data;
-            return PartialView("_CartPartial", CartList);
+                string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                var data = JsonConvert.DeserializeObject<IEnumerable<CartViewModel>>(resultuerinfo);
+                var CartList = data;
+                return PartialView("_CartPartial", CartList);
+            }
+            var list = _sessionManager
+                    .GetCart(x => new CartViewModel
+                    {
+                        Name = x.Name,
+                        Value = x.Value.ToString(),
+                        RealValue = x.Value,
+                        ProductId = x.Id,
+                        Qty = x.Qty
+                    });
+
+            var CartListSession = list;
+            return PartialView("_CartPartial", CartListSession);
+
         }
 
 
