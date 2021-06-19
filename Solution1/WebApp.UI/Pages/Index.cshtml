@@ -29,7 +29,10 @@
                             }
                             else
                             {
-                                <button type="button" onclick="addProductToCartSession(event)" id="@product.Id" data-product-id="@product.Id" class="btn btn-success">Add To Cart</button>
+                                <button type="button" onclick="addProductToCartSession(event)" id="@product.Id" data-product-id="@product.Id"
+                                        data-productname="@product.Name" class="btn btn-success">
+                                    Add To Cart
+                                </button>
                             }
                         }
                     }
@@ -46,6 +49,7 @@
     <script>
         var formData = {
             "productId": "",
+            "name": "",
             "qty": 1,
             "value": 0,
             "userId": ""
@@ -70,14 +74,23 @@
         };
 
         let addProductToCartSession = function (e) {
-            let productId = e.target.dataset.productId;           
-            this.formData.productId = productId;           
-            axios.post("/UserAccount/AddProductToCartSession/?id=" + productId)
-                .then(res => {
-                    console.log(res.data);
-                    let button = document.getElementById(productId);
-                    button.disabled = true;
-                })
+            let productId = e.target.dataset.productId;
+            let productName = e.target.dataset.productname;
+            this.formData.productId = productId;
+            this.formData.name = productName;
+            this.formData.qty = 1;            
+            axios({
+                url: "/UserAccount/AddOneProductToCartSession",
+                method: "post",
+                data: this.formData,
+                headers: {
+                    'Content-Type': "application/json"
+                }
+            }).then(res => {
+                console.log(res.data);
+                let button = document.getElementById(productId);
+                button.disabled = true;
+            })
                 .catch(err => {
                     alert(err.error);
                 })

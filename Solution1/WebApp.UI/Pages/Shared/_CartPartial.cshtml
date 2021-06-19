@@ -34,30 +34,36 @@
                             +
                         </button>
                     </div>
+                    <div class="col">
+                        &euro; 44.00
+                        <button onclick="removeFromCart(event)"
+                                data-product-id="@product.ProductId" data-user-id="@User.Identity.Name" class="button">
+                            X
+                        </button>
+                    </div>
                 }
                 else
                 {
                     <div class="col">
                         <button class="button" type="button"
-                                onclick="removeOneFromCartSession(event)"
-                                data-product-id="@product.ProductId" data-user-id="@User.Identity.Name">
+                                onclick="removeOneFromCartSession(event)" data-product-id="@product.ProductId" data-quantity="@product.Qty">
                             -
                         </button>
                         <a href="#" class="border">@product.Qty</a>
                         <button class="button" type="button"
-                                onclick="addOneToCartSession(event)"
-                                data-product-id="@product.ProductId" data-user-id="@User.Identity.Name">
+                                onclick="addOneToCartSession(event)" data-product-id="@product.ProductId" data-quantity="@product.Qty">
                             +
                         </button>
                     </div>
+                    <div class="col">
+                        &euro; 44.00
+                        <button onclick="removeProductFromCartSession(event)" type="button"
+                                data-product-id="@product.ProductId" class="button">
+                            X
+                        </button>
+                    </div>
                 }
-                <div class="col">
-                    &euro; 44.00
-                    <button onclick="removeFromCart(event)"
-                            data-product-id="@product.ProductId" data-user-id="@User.Identity.Name" class="button">
-                        X
-                    </button>
-                </div>
+
             </div>
         </div>
     }

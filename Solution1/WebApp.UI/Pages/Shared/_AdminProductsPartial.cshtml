@@ -23,8 +23,7 @@
                     <td>
                         <a asp-route-id="@product.Id" asp-page="/Admin/Products/Update" class="fa fa-edit">Edit</a> |
                         @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
-                        <button onclick="confirmAction(event)" data-product-id="@product.Id" type="button" class="btn-danger small">Delete</button>
-                        <a asp-action="AddToSession" asp-controller="UserAccount" asp-route-id="@product.Id" class="fa fa-edit">Add To Cart</a>
+                        <button onclick="confirmAction(event)" data-product-id="@product.Id" type="button" class="btn-danger small">Delete</button>                       
                     </td>
                 </tr>
             }

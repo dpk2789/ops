@@ -45,8 +45,8 @@
 @section scripts{
     @*<script src="~/js/product.js"></script>*@
     <script>
-        // var apiUrl = "https://localhost:44347";
-        var apiUrl = "http://api.robustpackagingeshop.com";
+        var apiUrl = "https://localhost:44347";
+        // var apiUrl = "http://api.robustpackagingeshop.com";
 
         axios.interceptors.request.use(function (config) {
 
@@ -93,9 +93,9 @@
         }
 
         var removeProduct = function (e) {
-            var productId = e.target.dataset.productId;
-            var el = document.getElementById('userId');
-            var userAccessToken = el.value;
+            let productId = e.target.dataset.productId;
+            let el = document.getElementById('userId');
+            let userAccessToken = el.value;
             console.log(userAccessToken);
 
 

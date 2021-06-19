@@ -11,6 +11,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using WebApp.UI.Helpers;
 using WebApp.UI.Models;
+using WebApp.UI.Models.cart;
 using static WebApp.UI.Pages.Products.IndexModel;
 
 namespace WebApp.UI.Controllers
@@ -35,16 +36,22 @@ namespace WebApp.UI.Controllers
             }
 
             return RedirectToPage("/Index");
+        }        
+
+        public void AddOneProductToCartSession([FromBody] CartProductRequest request)
+        {
+            _sessionManager.AddProductToSession(request);
         }
 
-        public async Task AddProductToCartSession(Guid id)
+        [HttpPost]
+        public void RemoveOneProductToCartSession([FromBody] CartProductRequest request)
         {
-            using var client = new HttpClient();
-            var updateProductsUri = new Uri(ApiUrls.Product.GetProduct + "?id=" + id);
-            var postTask = await client.GetAsync(updateProductsUri);
-            var result = postTask.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            var data = JsonConvert.DeserializeObject<CartProductViewModel>(result);
-            _sessionManager.AddProductToSession(data);
+            _sessionManager.RemoveOneQuantityFromCartSession(request);
+        }
+
+        public void RemoveProductToCartSession(Guid id)
+        {
+            _sessionManager.RemoveProduct(id);
         }
 
         [HttpGet]

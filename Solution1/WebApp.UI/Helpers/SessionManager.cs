@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WebApp.UI.Models;
+using WebApp.UI.Models.cart;
 
 namespace WebApp.UI.Helpers
 {
@@ -28,7 +29,7 @@ namespace WebApp.UI.Helpers
             return cartList.Select(selector);
         }
 
-        public void AddProductToSession(CartProductViewModel productViewModel)
+        public void AddProductToSession(CartProductRequest request)
         {
             //var currentId = HttpContext.Session.GetString("cart");
             //HttpContext.Session.SetString("id", Id.ToString());           
@@ -41,14 +42,20 @@ namespace WebApp.UI.Helpers
                 cartList = JsonConvert.DeserializeObject<List<CartProductViewModel>>(stringObject);
             }
 
-            if (cartList.Any(x => x.Id == productViewModel.Id))
+            if (cartList.Any(x => x.Id == request.ProductId))
             {
-                var findproductViewModel = cartList.Find(x => x.Id == productViewModel.Id);
-                findproductViewModel.Qty = productViewModel.Qty + 1;
+                var findproductViewModel = cartList.Find(x => x.Id == request.ProductId);
+                findproductViewModel.Qty = request.Qty + 1;
             }
             else
             {
-                cartList.Add(productViewModel);
+                cartList.Add(new CartProductViewModel
+                {
+                    Id = request.ProductId,
+                    Name = request.Name,
+                    ProductId = request.ProductId,
+                    Qty = request.Qty
+                });
             }
 
             stringObject = JsonConvert.SerializeObject(cartList);
@@ -60,7 +67,7 @@ namespace WebApp.UI.Helpers
             _session.Remove("cart");
         }
 
-        public void RemoveProduct(Guid productId, int qty)
+        public void RemoveProduct(Guid productId)
         {
             var cartList = new List<CartProductViewModel>();
             var stringObject = _session.GetString("cart");
@@ -69,10 +76,30 @@ namespace WebApp.UI.Helpers
 
             cartList = JsonConvert.DeserializeObject<List<CartProductViewModel>>(stringObject);
 
-            if (!cartList.Any(x => x.ProductId == productId)) return;
+            if (!cartList.Any(x => x.Id == productId)) return;
 
-            var product = cartList.First(x => x.ProductId == productId);
-            product.Qty -= qty;
+            var product = cartList.First(x => x.Id == productId);
+            cartList.Remove(product);
+
+            stringObject = JsonConvert.SerializeObject(cartList);
+
+            _session.SetString("cart", stringObject);
+        }
+
+
+        public void RemoveOneQuantityFromCartSession(CartProductRequest productViewModel)
+        {
+            var cartList = new List<CartProductViewModel>();
+            var stringObject = _session.GetString("cart");
+
+            if (string.IsNullOrEmpty(stringObject)) return;
+
+            cartList = JsonConvert.DeserializeObject<List<CartProductViewModel>>(stringObject);
+
+            if (!cartList.Any(x => x.Id == productViewModel.ProductId)) return;
+
+            var product = cartList.First(x => x.Id == productViewModel.ProductId);
+            product.Qty = product.Qty - 1;
 
             if (product.Qty <= 0)
             {

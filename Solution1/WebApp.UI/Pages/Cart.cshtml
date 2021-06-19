@@ -22,10 +22,40 @@
         // var apiUrl = "http://api.robustpackagingeshop.com";
 
         var addOneToCartSession = function (e) {
-            var productId = e.target.dataset.productId;          
+            let productId = e.target.dataset.productId;
+            let quantity = e.target.dataset.quantity;
             this.formData.productId = productId;
-            
-            axios.post("/UserAccount/AddProductToCartSession/?id=" + productId)
+            this.formData.qty = parseInt(quantity);
+
+            axios({
+                url: "/UserAccount/AddOneProductToCartSession",
+                method: "post",
+                data: this.formData,
+                headers: {
+                    'Content-Type': "application/json"
+                }
+            }).then(res => {
+                console.log(res.data);
+                updateCart();
+            })
+                .catch(err => {
+                    alert(err.error);
+                })
+        }
+
+        var removeOneFromCartSession = function (e) {
+            let productId = e.target.dataset.productId;
+            let quantity = e.target.dataset.quantity;
+            this.formData.productId = productId;
+            this.formData.qty = parseInt(quantity);
+            axios({
+                url: "/UserAccount/RemoveOneProductToCartSession",
+                method: "post",
+                data: this.formData,
+                headers: {
+                    'Content-Type': "application/json"
+                }
+            })
                 .then(res => {
                     console.log(res.data);
                     updateCart();
@@ -35,11 +65,22 @@
                 })
         }
 
+        var removeProductFromCartSession = function (e) {
+
+            let productId = e.target.dataset.productId;           
+            axios.post("/UserAccount/RemoveProductToCartSession/?id=" + productId,)
+                .then(res => {
+                    updateCart();
+                })
+                .catch(err => {
+                    alert(err.error);
+                })
+        }
 
         var addOneToCart = function (e) {
 
-            var productId = e.target.dataset.productId;
-            var userName = e.target.dataset.userId;
+            let productId = e.target.dataset.productId;
+            let userName = e.target.dataset.userId;
             this.formData.productId = productId;
             this.formData.userid = userName;
 
@@ -66,8 +107,8 @@
 
         var removeFromCart = function (e) {
 
-            var productId = e.target.dataset.productId;
-            var userName = e.target.dataset.userId;
+            let productId = e.target.dataset.productId;
+            let userName = e.target.dataset.userId;
             this.formData.productId = productId;
             this.formData.userid = userName;
 
@@ -79,6 +120,7 @@
                     alert(err.error);
                 })
         }
+
 
     </script>
 }

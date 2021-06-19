@@ -42,7 +42,7 @@ namespace WebApp.UI.Pages
                 var cartList = _sessionManager
               .GetCart(x => new ProductViewModel
               {
-                  Name = x.ProductName,
+                  Name = x.Name,
                   Value = x.Value,
                   Id = x.ProductId,
               });             
