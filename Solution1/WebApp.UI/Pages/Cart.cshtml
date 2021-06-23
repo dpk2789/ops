@@ -18,8 +18,8 @@
             "value": 0,
             "userId": ""
         }
-        var apiUrl = "https://localhost:44347";
-        // var apiUrl = "http://api.robustpackagingeshop.com";
+        // var apiUrl = "https://localhost:44347";
+        var apiUrl = "http://api.robustpackagingeshop.com";
 
         var addOneToCartSession = function (e) {
             let productId = e.target.dataset.productId;
@@ -67,7 +67,7 @@
 
         var removeProductFromCartSession = function (e) {
 
-            let productId = e.target.dataset.productId;           
+            let productId = e.target.dataset.productId;
             axios.post("/UserAccount/RemoveProductToCartSession/?id=" + productId,)
                 .then(res => {
                     updateCart();

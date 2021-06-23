@@ -11,12 +11,29 @@ namespace WebApp.UI.Helpers
     public class SessionManager : ISessionManager
     {
         private readonly ISession _session;
-
+        private const string KeyCart = "cart";
+        private const string KeyCustomerInfo = "customer-info";
         public SessionManager(IHttpContextAccessor httpContextAccessor)
         {
             _session = httpContextAccessor.HttpContext.Session;
         }
+        public void AddCustomerInformation(CustomerInformation customer)
+        {
+            var stringObject = JsonConvert.SerializeObject(customer);
 
+            _session.SetString(KeyCustomerInfo, stringObject);
+        }
+        public CustomerInformation GetCustomerInformation()
+        {
+            var stringObject = _session.GetString(KeyCustomerInfo);
+
+            if (string.IsNullOrEmpty(stringObject))
+                return null;
+
+            var customerInformation = JsonConvert.DeserializeObject<CustomerInformation>(stringObject);
+
+            return customerInformation;
+        }
         public IEnumerable<TResult> GetCart<TResult>(Func<CartProductViewModel, TResult> selector)
         {
             var stringObject = _session.GetString("cart");

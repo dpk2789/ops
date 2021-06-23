@@ -1,15 +1,12 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Stripe;
 using System;
-using System.IO;
-using System.Net;
 using WebApp.UI.Helpers;
 using WebApp.UI.Models;
 
@@ -53,6 +50,8 @@ namespace WebApp.UI
                 options.Cookie.MaxAge = TimeSpan.FromMinutes(20);
             });
             services.AddScoped<ISessionManager, SessionManager>();
+
+            StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["SecretKey"];
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -103,6 +104,19 @@ namespace WebApp.UI.Controllers
             string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             var data = JsonConvert.DeserializeObject<IEnumerable<ProductViewModel>>(resultuerinfo);
             return PartialView("_AdminProductsPartial", data);
+        }
+
+        [Route("create-payment-intent")]
+        [HttpPost]
+        public ActionResult Create()
+        {
+            var paymentIntents = new PaymentIntentService();
+            var paymentIntent = paymentIntents.Create(new PaymentIntentCreateOptions
+            {
+                Amount = 4,
+                Currency = "usd",
+            });
+            return Json(new { clientSecret = paymentIntent.ClientSecret });
         }
     }
 }

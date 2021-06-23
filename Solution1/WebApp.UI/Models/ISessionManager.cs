@@ -11,5 +11,8 @@ namespace WebApp.UI.Models
         void RemoveProduct(Guid productId);
         void RemoveOneQuantityFromCartSession(CartProductRequest productViewModel);
         void ClearCart();
+
+        void AddCustomerInformation(CustomerInformation customer);
+        CustomerInformation GetCustomerInformation();
     }
 }
