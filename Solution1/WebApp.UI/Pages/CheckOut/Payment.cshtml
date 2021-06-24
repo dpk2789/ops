@@ -12,9 +12,15 @@
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
-
+        const requestConfig = {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        };
+       
+      
         var handleRazorpayPayment = async function () {
-            const confirmPayment = {
+            const confirmPaymentPayload = {
                 "razorpay_payment_id": "",
                 "razorpay_order_id": "",
                 "razorpay_signature": "",
@@ -30,17 +36,18 @@
                 image: '/your_logo.png',
                 order_id: order_id,
                 handler: (response) => {
-                    confirmPayment.razorpay_order_id = response.razorpay_order_id;
-                    confirmPayment.razorpay_payment_id = response.razorpay_payment_id;
-                    confirmPayment.razorpay_signature = response.razorpay_signature;
-
-                    axios.post(`/Payment/ConfirmPayment`, confirmPayment)
+                    const confirmPaymentPayload = new FormData();
+                    formData.set('razorpay_payment_id', response.razorpay_payment_id);
+                    formData.set('razorpay_order_id', response.razorpay_order_id);
+                    formData.set('razorpay_signature', response.razorpay_signature);
+                    axios.post(`/Payment/ConfirmPayment`, response, formData)
                         .then(response => alert(response.data))
                         .catch((err) => console.log(err))
                 },
                 prefill: {
                     name: "TESTUSER",
                     email: "testuser@mail.com",
+                    contact: "9999999999"
                 },
                 theme: {
                     color: '#F37254'
@@ -48,7 +55,7 @@
             };
             const rzp1 = new window.Razorpay(options);
             rzp1.open();
-             rzp1.on('payment.failed', function (response) {
+            rzp1.on('payment.failed', function (response) {
                 alert(response.error.code);
                 alert(response.error.description);
                 alert(response.error.source);
@@ -88,19 +95,19 @@
         };
 
 
-            //var rzp1 = new Razorpay(options);
-            //rzp1.on('payment.failed', function (response) {
-            //    alert(response.error.code);
-            //    alert(response.error.description);
-            //    alert(response.error.source);
-            //    alert(response.error.step);
-            //    alert(response.error.reason);
-            //    alert(response.error.metadata.order_id);
-            //    alert(response.error.metadata.payment_id);
-            //});
-            //document.getElementById('rzp-button1').onclick = function (e) {
-            //    rzp1.open();
-            //    e.preventDefault();
-            //}
+                //var rzp1 = new Razorpay(options);
+                //rzp1.on('payment.failed', function (response) {
+                //    alert(response.error.code);
+                //    alert(response.error.description);
+                //    alert(response.error.source);
+                //    alert(response.error.step);
+                //    alert(response.error.reason);
+                //    alert(response.error.metadata.order_id);
+                //    alert(response.error.metadata.payment_id);
+                //});
+                //document.getElementById('rzp-button1').onclick = function (e) {
+                //    rzp1.open();
+                //    e.preventDefault();
+                //}
     </script>
 }

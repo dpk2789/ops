@@ -48,7 +48,7 @@ namespace WebApp.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ConfirmPayment([FromBody]ConfirmPaymentPayload confirmPayment)
+        public async Task<IActionResult> ConfirmPayment([FromForm]ConfirmPaymentPayload confirmPayment)
         {
             var attributes = new Dictionary<string, string>
         {
