@@ -13,7 +13,7 @@ namespace WebApp.UI.Controllers
         private RazorpayClient _razorpayClient;
         public PaymentController()
         {
-            _razorpayClient = new RazorpayClient("key", "secret");
+            _razorpayClient = new RazorpayClient("rzp_test_PhqnP6sane3Ovm", "tWL6ajNZ58SXI7Q9O1ayoy5A");
         }
 
         public IActionResult Index()
@@ -29,7 +29,6 @@ namespace WebApp.UI.Controllers
 
 
         [HttpPost]
-        [Route("initialize")]
         public async Task<IActionResult> InitializePayment()
         {
             var options = new Dictionary<string, object>
@@ -49,8 +48,7 @@ namespace WebApp.UI.Controllers
         }
 
         [HttpPost]
-        [Route("confirm")]
-        public async Task<IActionResult> ConfirmPayment(ConfirmPaymentPayload confirmPayment)
+        public async Task<IActionResult> ConfirmPayment([FromBody]ConfirmPaymentPayload confirmPayment)
         {
             var attributes = new Dictionary<string, string>
         {

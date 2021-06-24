@@ -27,22 +27,7 @@ namespace WebApp.UI.Pages.CheckOut
             {
                 return RedirectToPage("/Checkout/CustomerInformation");
             }
-
-            var razorpayClient = new RazorpayClient("rzp_test_PhqnP6sane3Ovm", "tWL6ajNZ58SXI7Q9O1ayoy5A");
-
-            var options = new Dictionary<string, object>
-        {
-            { "amount", 200 },
-            { "currency", "INR" },
-            { "receipt", "recipt_1" },
-            // auto capture payments rather than manual capture
-            // razor pay recommended option
-            { "payment_capture", true }
-        };
-
-            var order = razorpayClient.Order.Create(options);
-            var orderId = order["id"].ToString();
-            var orderJson = order.Attributes.ToString();
+           
             return Page();
         }
         public async Task<IActionResult> OnPost(string stripeEmail, string stripeToken)

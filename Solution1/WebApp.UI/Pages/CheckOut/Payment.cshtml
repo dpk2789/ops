@@ -4,31 +4,37 @@
 }
 
 
-<body>
-    <!-- Display a payment form -->
-    <form id="payment-form">
-        <button id="rzp-button1">Pay</button>
-    </form>
-</body>
+
+<button onclick="handleRazorpayPayment()" id="rzp-button1" type="button">Pay</button>
+
 <link href="~/css/stripe.css" rel="stylesheet" />
 @section scripts {
-   
+
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
 
-        const handleRazorpayPayment = () => {
-            const data = {}; // here anything extra can be passed while creating an order
-            const response = await axios.post(`api/payment/initialize`, data);
+        var handleRazorpayPayment = async function () {
+            const confirmPayment = {
+                "razorpay_payment_id": "",
+                "razorpay_order_id": "",
+                "razorpay_signature": "",
+
+            }; // here anything extra can be passed while creating an order
+            const response = await axios.post(`/Payment/InitializePayment`);
             const order_id = response.data.id;
             const options = {
-                key: `razorpay_key`,
+                key: `rzp_test_PhqnP6sane3Ovm`,
                 amount: 200,
-                name: 'Your javascript client app',
-                description: 'Pro Membership',
+                name: 'Robust Packaging Eshop',
+                description: 'Carton Boxes',
                 image: '/your_logo.png',
                 order_id: order_id,
                 handler: (response) => {
-                    axios.post(`api/payment/confirm`, response)
+                    confirmPayment.razorpay_order_id = response.razorpay_order_id;
+                    confirmPayment.razorpay_payment_id = response.razorpay_payment_id;
+                    confirmPayment.razorpay_signature = response.razorpay_signature;
+
+                    axios.post(`/Payment/ConfirmPayment`, confirmPayment)
                         .then(response => alert(response.data))
                         .catch((err) => console.log(err))
                 },
@@ -42,12 +48,21 @@
             };
             const rzp1 = new window.Razorpay(options);
             rzp1.open();
+             rzp1.on('payment.failed', function (response) {
+                alert(response.error.code);
+                alert(response.error.description);
+                alert(response.error.source);
+                alert(response.error.step);
+                alert(response.error.reason);
+                alert(response.error.metadata.order_id);
+                alert(response.error.metadata.payment_id);
+            });
         };
 
 
 
         var options = {
-            "key": "YOUR_KEY_ID", // Enter the Key ID generated from the Dashboard
+            "key": "rzp_test_PhqnP6sane3Ovm", // Enter the Key ID generated from the Dashboard
             "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
             "currency": "INR",
             "name": "Acme Corp",
@@ -71,19 +86,21 @@
                 "color": "#3399cc"
             }
         };
-        var rzp1 = new Razorpay(options);
-        rzp1.on('payment.failed', function (response) {
-            alert(response.error.code);
-            alert(response.error.description);
-            alert(response.error.source);
-            alert(response.error.step);
-            alert(response.error.reason);
-            alert(response.error.metadata.order_id);
-            alert(response.error.metadata.payment_id);
-        });
-        document.getElementById('rzp-button1').onclick = function (e) {
-            rzp1.open();
-            e.preventDefault();
-        }
+
+
+            //var rzp1 = new Razorpay(options);
+            //rzp1.on('payment.failed', function (response) {
+            //    alert(response.error.code);
+            //    alert(response.error.description);
+            //    alert(response.error.source);
+            //    alert(response.error.step);
+            //    alert(response.error.reason);
+            //    alert(response.error.metadata.order_id);
+            //    alert(response.error.metadata.payment_id);
+            //});
+            //document.getElementById('rzp-button1').onclick = function (e) {
+            //    rzp1.open();
+            //    e.preventDefault();
+            //}
     </script>
 }
