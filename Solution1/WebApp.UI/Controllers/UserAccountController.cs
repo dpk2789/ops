@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +36,7 @@ namespace WebApp.UI.Controllers
             }
 
             return RedirectToPage("/Index");
-        }        
+        }
 
         public void AddOneProductToCartSession([FromBody] CartProductRequest request)
         {
@@ -58,7 +57,6 @@ namespace WebApp.UI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCartPartialView()
         {
-
             if (User.Identity.IsAuthenticated)
             {
                 using var client = new HttpClient();
@@ -73,7 +71,9 @@ namespace WebApp.UI.Controllers
                 var CartList = data;
                 return PartialView("_CartPartial", CartList);
             }
-            var list = _sessionManager
+            else
+            {
+                var list = _sessionManager
                     .GetCart(x => new CartViewModel
                     {
                         Name = x.Name,
@@ -83,9 +83,9 @@ namespace WebApp.UI.Controllers
                         Qty = x.Qty
                     });
 
-            var CartListSession = list;
-            return PartialView("_CartPartial", CartListSession);
-
+                var CartListSession = list;
+                return PartialView("_CartPartial", CartListSession);
+            }
         }
 
 
@@ -106,17 +106,5 @@ namespace WebApp.UI.Controllers
             return PartialView("_AdminProductsPartial", data);
         }
 
-        [Route("create-payment-intent")]
-        [HttpPost]
-        public ActionResult Create()
-        {
-            var paymentIntents = new PaymentIntentService();
-            var paymentIntent = paymentIntents.Create(new PaymentIntentCreateOptions
-            {
-                Amount = 4,
-                Currency = "usd",
-            });
-            return Json(new { clientSecret = paymentIntent.ClientSecret });
-        }
     }
 }

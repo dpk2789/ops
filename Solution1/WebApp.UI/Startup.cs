@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Stripe;
 using System;
 using WebApp.UI.Helpers;
 using WebApp.UI.Models;
@@ -49,9 +48,7 @@ namespace WebApp.UI
                 options.Cookie.Name = "Cart";
                 options.Cookie.MaxAge = TimeSpan.FromMinutes(20);
             });
-            services.AddScoped<ISessionManager, SessionManager>();
-
-            StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["SecretKey"];
+            services.AddScoped<ISessionManager, SessionManager>();            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

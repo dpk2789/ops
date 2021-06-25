@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace OnlineShop.Domain.Models
 {
@@ -8,7 +7,8 @@ namespace OnlineShop.Domain.Models
     {
         public Guid Id { get; set; }
         public string OrderRef { get; set; }
-        public string StripeReference { get; set; }
+        public string RazorPayReference { get; set; }
+        public string UserId { get; set; }
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -19,9 +19,7 @@ namespace OnlineShop.Domain.Models
         public string Address2 { get; set; }
         public string City { get; set; }
         public string PostCode { get; set; }
-
         public OrderStatus Status { get; set; }
-
-        public ICollection<OrderProduct> OrderStocks { get; set; }
+        public ICollection<OrderProduct> OrderProducts { get; set; }
     }
 }

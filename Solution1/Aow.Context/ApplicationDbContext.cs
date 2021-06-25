@@ -14,6 +14,8 @@ namespace Aow.Context
 
         public DbSet<Product> Products { get; set; }
         public DbSet<CartProduct> CartProducts { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderProduct> OrderProducts { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<AppUser>(entity => entity.Property(m => m.Id).HasMaxLength(85));

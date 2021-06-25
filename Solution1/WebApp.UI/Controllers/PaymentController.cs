@@ -1,30 +1,37 @@
 ﻿
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Razorpay.Api;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using WebApp.UI.Helpers;
+using WebApp.UI.Models;
 
 namespace WebApp.UI.Controllers
 {
     public class PaymentController : Controller
     {
-        private RazorpayClient _razorpayClient;
-        public PaymentController()
+        private readonly RazorpayClient _razorpayClient;
+        private string RazorPayKey { get; }
+        private readonly ISessionManager _sessionManager;
+
+        public PaymentController(IConfiguration config, ISessionManager sessionManager)
         {
-            _razorpayClient = new RazorpayClient("rzp_test_PhqnP6sane3Ovm", "tWL6ajNZ58SXI7Q9O1ayoy5A");
+            _sessionManager = sessionManager;
+            RazorPayKey = config["RazorPay:Key"].ToString();
+            _razorpayClient = new RazorpayClient(RazorPayKey, "tWL6ajNZ58SXI7Q9O1ayoy5A");
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
         public class ConfirmPaymentPayload
         {
-            public string razorpay_payment_id { get; }
-            public string razorpay_order_id { get; }
-            public string razorpay_signature { get; }
+            public string RazorpayPaymentId { get; set; }
+            public string RazorpayOrderId { get; set; }
+            public string RazorpaySignature { get; set; }
         }
 
 
@@ -48,13 +55,13 @@ namespace WebApp.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ConfirmPayment([FromForm]ConfirmPaymentPayload confirmPayment)
+        public async Task<IActionResult> ConfirmPayment(ConfirmPaymentPayload confirmPayment)
         {
             var attributes = new Dictionary<string, string>
         {
-            { "razorpay_payment_id", confirmPayment.razorpay_payment_id },
-            { "razorpay_order_id", confirmPayment.razorpay_order_id },
-            { "razorpay_signature", confirmPayment.razorpay_signature }
+            { "razorpay_payment_id", confirmPayment.RazorpayPaymentId },
+            { "razorpay_order_id", confirmPayment.RazorpayOrderId },
+            { "razorpay_signature", confirmPayment.RazorpaySignature }
         };
             try
             {
@@ -63,10 +70,36 @@ namespace WebApp.UI.Controllers
                 var isValid = Utils.ValidatePaymentSignature(attributes);
                 if (isValid)
                 {
-                    var order = _razorpayClient.Order.Fetch(confirmPayment.razorpay_order_id);
-                    var payment = _razorpayClient.Payment.Fetch(confirmPayment.razorpay_payment_id);
+                    var order = _razorpayClient.Order.Fetch(confirmPayment.RazorpayOrderId);
+                    var payment = _razorpayClient.Payment.Fetch(confirmPayment.RazorpayPaymentId);
                     if (payment["status"] == "captured")
                     {
+                        if (User.Identity.IsAuthenticated)
+                        {
+                            using var client = new HttpClient();
+                            var cartListUri = new Uri(ApiUrls.Cart.GetCartItems + "/?userId=" + User.Identity.Name);
+                            var userAccessToken = User.Claims.FirstOrDefault(x => x.Type == "AcessToken")?.Value;
+                            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
+
+                            var getUserInfo = await client.GetAsync(cartListUri);
+
+                            string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+                        }
+                        else
+                        {
+                            var list = _sessionManager.GetCart(x => new CartViewModel
+                            {
+                                Name = x.Name,
+                                Value = x.Value.ToString(),
+                                RealValue = x.Value,
+                                ProductId = x.Id,
+                                Qty = x.Qty
+                            });
+
+                            var customerinformation = _sessionManager.GetCustomerInformation();
+                        }
+
                         return Ok("Payment Successful");
                     }
                 }

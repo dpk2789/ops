@@ -3,8 +3,6 @@
 @{
 }
 
-
-
 <button onclick="handleRazorpayPayment()" id="rzp-button1" type="button">Pay</button>
 
 <link href="~/css/stripe.css" rel="stylesheet" />
@@ -12,24 +10,17 @@
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
+
         const requestConfig = {
             headers: {
                 "Content-Type": "multipart/form-data"
             }
         };
-       
-      
         var handleRazorpayPayment = async function () {
-            const confirmPaymentPayload = {
-                "razorpay_payment_id": "",
-                "razorpay_order_id": "",
-                "razorpay_signature": "",
-
-            }; // here anything extra can be passed while creating an order
             const response = await axios.post(`/Payment/InitializePayment`);
             const order_id = response.data.id;
-            const options = {
-                key: `rzp_test_PhqnP6sane3Ovm`,
+            const options = await {
+                key: '@Model.RazorPayKey',
                 amount: 200,
                 name: 'Robust Packaging Eshop',
                 description: 'Carton Boxes',
@@ -37,10 +28,10 @@
                 order_id: order_id,
                 handler: (response) => {
                     const confirmPaymentPayload = new FormData();
-                    formData.set('razorpay_payment_id', response.razorpay_payment_id);
-                    formData.set('razorpay_order_id', response.razorpay_order_id);
-                    formData.set('razorpay_signature', response.razorpay_signature);
-                    axios.post(`/Payment/ConfirmPayment`, response, formData)
+                    confirmPaymentPayload.set('RazorpayPaymentId', response.razorpay_payment_id);
+                    confirmPaymentPayload.set('RazorpayOrderId', response.razorpay_order_id);
+                    confirmPaymentPayload.set('RazorpaySignature', response.razorpay_signature);
+                    axios.post(`/Payment/ConfirmPayment`, confirmPaymentPayload)
                         .then(response => alert(response.data))
                         .catch((err) => console.log(err))
                 },
@@ -66,14 +57,12 @@
             });
         };
 
-
-
         var options = {
             "key": "rzp_test_PhqnP6sane3Ovm", // Enter the Key ID generated from the Dashboard
             "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
             "currency": "INR",
             "name": "Acme Corp",
-            "description": "Test Transaction",
+            "description": "TRazorPayKeyazorPayKeyazorPayKeyublicKeyest Transaction",
             "image": "https://example.com/your_logo",
             "order_id": "order_9A33XWu170gUtm", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
             "handler": function (response) {
@@ -95,19 +84,19 @@
         };
 
 
-                //var rzp1 = new Razorpay(options);
-                //rzp1.on('payment.failed', function (response) {
-                //    alert(response.error.code);
-                //    alert(response.error.description);
-                //    alert(response.error.source);
-                //    alert(response.error.step);
-                //    alert(response.error.reason);
-                //    alert(response.error.metadata.order_id);
-                //    alert(response.error.metadata.payment_id);
-                //});
-                //document.getElementById('rzp-button1').onclick = function (e) {
-                //    rzp1.open();
-                //    e.preventDefault();
-                //}
+                        //var rzp1 = new Razorpay(options);
+                        //rzp1.on('payment.failed', function (response) {
+                        //    alert(response.error.code);
+                        //    alert(response.error.description);
+                        //    alert(response.error.source);
+                        //    alert(response.error.step);
+                        //    alert(response.error.reason);
+                        //    alert(response.error.metadata.order_id);
+                        //    alert(response.error.metadata.payment_id);
+                        //});
+                        //document.getElementById('rzp-button1').onclick = function (e) {
+                        //    rzp1.open();
+                        //    e.preventDefault();
+                        //}
     </script>
 }

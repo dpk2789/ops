@@ -20,6 +20,11 @@ namespace WebApp.UI.Pages.CheckOut
         public CustomerInformation customerInformation { get; set; }
         public IActionResult OnGet()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+
+                return RedirectToPage("/Checkout/Payment");
+            }
             var information = _sessionManager.GetCustomerInformation();
 
             if (information == null)
