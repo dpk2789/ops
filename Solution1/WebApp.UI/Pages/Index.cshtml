@@ -55,13 +55,14 @@
             "userId": ""
         };
         // var apiUrl = "https://localhost:44347";
-        var apiUrl = "http://api.robustpackagingeshop.com";
+       // var apiUrl = "http://api.robustpackagingeshop.com";
+        var apiUrl = '@Model.ApiUrl';
         let addOneToCart = function (e) {
             let productId = e.target.dataset.productId;
             let userName = e.target.dataset.userId;
             this.formData.productId = productId;
             this.formData.userId = userName;
-            alert(productId);
+           // alert(productId);
             axios.post(apiUrl + "/api/Cart/addtocart", this.formData)
                 .then(res => {
                     console.log(res.data);

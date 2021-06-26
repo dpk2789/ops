@@ -45,9 +45,9 @@
 @section scripts{
     @*<script src="~/js/product.js"></script>*@
     <script>
-        var apiUrl = "https://localhost:44347";
+      //  var apiUrl = "https://localhost:44347";
         // var apiUrl = "http://api.robustpackagingeshop.com";
-
+        var apiUrl = '@Model.ApiUrl';
         axios.interceptors.request.use(function (config) {
 
             // spinning start to show

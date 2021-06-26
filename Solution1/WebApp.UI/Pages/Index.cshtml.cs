@@ -15,11 +15,12 @@ namespace WebApp.UI.Pages
     public class IndexModel : PageModel
     {
         private ISessionManager _sessionManager;
-
+        public string ApiUrl { get; }      
         public IndexModel(ISessionManager sessionManager, ILogger<IndexModel> logger)
         {
             _sessionManager = sessionManager;
             _logger = logger;
+            ApiUrl = ApiUrls.Rootlocal;
         }
 
         private readonly ILogger<IndexModel> _logger;

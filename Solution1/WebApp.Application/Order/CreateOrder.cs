@@ -18,11 +18,14 @@ namespace OnlineShop.Application.Order
             _orderRepository = orderRepository;           
         }
 
-        public class Request
+        public class OrderRequest
         {
+            public string RazorpayPaymentId { get; set; }
+            public string RazorpayOrderId { get; set; }
+            public string RazorpaySignature { get; set; }
             public string RazorReference { get; set; }
             public string SessionId { get; set; }
-
+            public string UserId { get; set; }
             public string FirstName { get; set; }
             public string LastName { get; set; }
             public string Email { get; set; }
@@ -42,7 +45,7 @@ namespace OnlineShop.Application.Order
             public int Qty { get; set; }
         }
 
-        public async Task<bool> Do(Request request)
+        public async Task<bool> Do(OrderRequest request)
         {
             var orderByUser = new Domain.Models.Order
             {

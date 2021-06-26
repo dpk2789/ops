@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,6 +14,11 @@ namespace WebApp.UI.Pages.Products
 {
     public class IndexModel : PageModel
     {
+        public string ApiUrl { get; }
+        public IndexModel()
+        {
+            ApiUrl = ApiUrls.Rootlocal;
+        }       
         public IEnumerable<ProductViewModel> Products { get; set; }
 
         [BindProperty]

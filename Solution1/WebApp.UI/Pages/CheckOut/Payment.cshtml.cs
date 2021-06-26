@@ -16,14 +16,20 @@ namespace WebApp.UI.Pages.CheckOut
         }
         public IActionResult OnGet()
         {
-            var information = _sessionManager.GetCustomerInformation();
-
-            if (information == null)
+            if (User.Identity.IsAuthenticated)
             {
-                return RedirectToPage("/Checkout/CustomerInformation");
+                return Page();
             }
+            else
+            {
+                var information = _sessionManager.GetCustomerInformation();
 
-            return Page();
+                if (information == null)
+                {
+                    return RedirectToPage("/Checkout/CustomerInformation");
+                }
+                return Page();
+            }           
         }
         public IActionResult OnPost()
         {

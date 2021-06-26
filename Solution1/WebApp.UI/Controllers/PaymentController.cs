@@ -2,15 +2,18 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Razorpay.Api;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using WebApp.UI.Helpers;
 using WebApp.UI.Models;
+using WebApp.UI.Models.Checkout;
 
 namespace WebApp.UI.Controllers
 {
@@ -33,7 +36,6 @@ namespace WebApp.UI.Controllers
             public string RazorpayOrderId { get; set; }
             public string RazorpaySignature { get; set; }
         }
-
 
         [HttpPost]
         public async Task<IActionResult> InitializePayment()
@@ -67,23 +69,32 @@ namespace WebApp.UI.Controllers
             {
                 Utils.verifyPaymentSignature(attributes);
                 // OR
-                var isValid = Utils.ValidatePaymentSignature(attributes);
+                bool isValid = Utils.ValidatePaymentSignature(attributes);
                 if (isValid)
                 {
                     var order = _razorpayClient.Order.Fetch(confirmPayment.RazorpayOrderId);
+                    dynamic orderJson = order.Attributes.ToString();
+                    var data = JsonConvert.DeserializeObject<RazorOrder>(orderJson);
                     var payment = _razorpayClient.Payment.Fetch(confirmPayment.RazorpayPaymentId);
                     if (payment["status"] == "captured")
                     {
                         if (User.Identity.IsAuthenticated)
                         {
                             using var client = new HttpClient();
-                            var cartListUri = new Uri(ApiUrls.Cart.GetCartItems + "/?userId=" + User.Identity.Name);
+                            var createOrderUri = new Uri(ApiUrls.Order.Create);
                             var userAccessToken = User.Claims.FirstOrDefault(x => x.Type == "AcessToken")?.Value;
                             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
 
-                            var getUserInfo = await client.GetAsync(cartListUri);
+                            var orderRequest = new OrderViewModel();
+                            orderRequest.UserId = User.Identity.Name;
+                            orderRequest.RazorpayOrderId = confirmPayment.RazorpayOrderId;
+                            orderRequest.RazorpayPaymentId = confirmPayment.RazorpayPaymentId;
+                            orderRequest.RazorpaySignature = confirmPayment.RazorpaySignature;
 
-                            string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                            var request = JsonConvert.SerializeObject( orderRequest );
+                            var content = new StringContent(request, Encoding.UTF8, "application/json");
+                            var postOrderResult = await client.PostAsync(createOrderUri, content);
+                            string orderResult = postOrderResult.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
                         }
                         else

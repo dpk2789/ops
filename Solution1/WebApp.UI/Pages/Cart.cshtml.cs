@@ -15,10 +15,11 @@ namespace WebApp.UI.Pages
     public class CartModel : PageModel
     {
         private ISessionManager _sessionManager;
-
+        public string ApiUrl { get; }       
         public CartModel(ISessionManager sessionManager)
         {
             _sessionManager = sessionManager;
+            ApiUrl = ApiUrls.Rootlocal;
         }
 
         public IEnumerable<CartViewModel> CartList { get; set; }

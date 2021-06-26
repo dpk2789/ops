@@ -19,8 +19,8 @@
             "userId": ""
         }
         // var apiUrl = "https://localhost:44347";
-        var apiUrl = "http://api.robustpackagingeshop.com";
-       
+       // var apiUrl = "http://api.robustpackagingeshop.com";
+       var apiUrl = '@Model.ApiUrl';
         var addOneToCartSession = function (e) {
             let productId = e.target.dataset.productId;
             let quantity = e.target.dataset.quantity;
