@@ -42,7 +42,6 @@ namespace WebApp.Api.Controllers
             }
         }
 
-
         [Authorize]
         [HttpPut("api/Products/UpdateProduct")]
         public async Task<IActionResult> UpdateProduct([FromBody] UpdateProduct.Request request, [FromServices] UpdateProduct updateProduct)

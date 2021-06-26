@@ -1,6 +1,7 @@
 ﻿using Aow.Application;
 using Aow.Context.Repository;
 using Microsoft.Extensions.DependencyInjection;
+using OnlineShop.Context.Repository;
 using OnlineShop.Domain.Interface;
 using System.Linq;
 using System.Reflection;
@@ -28,6 +29,7 @@ namespace WebApp.Api
             @this.AddScoped<IIdentityService, IdentityService>();
             @this.AddTransient<IProductRepository, ProductRepository>();
             @this.AddTransient<ICartRepository, CartRepository>();
+            @this.AddTransient<IOrderRepository, OrderRepository>();
             return @this;
         }
     }
