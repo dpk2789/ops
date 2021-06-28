@@ -102,7 +102,7 @@ namespace WebApp.UI.Controllers
                             var list = _sessionManager.GetCart(x => new CartViewModel
                             {
                                 Name = x.Name,
-                                Value = x.Value.ToString(),
+                                Value = x.Value,
                                 RealValue = x.Value,
                                 ProductId = x.Id,
                                 Qty = x.Qty

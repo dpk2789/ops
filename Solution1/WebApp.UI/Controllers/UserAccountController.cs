@@ -77,7 +77,7 @@ namespace WebApp.UI.Controllers
                     .GetCart(x => new CartViewModel
                     {
                         Name = x.Name,
-                        Value = x.Value.ToString(),
+                        Value = x.Value,
                         RealValue = x.Value,
                         ProductId = x.Id,
                         Qty = x.Qty

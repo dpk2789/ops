@@ -44,7 +44,7 @@ namespace OnlineShop.Application.Order
         }
 
         public async Task<bool> Do(OrderRequest request)
-        {
+        {           
             var orderByUser = new Domain.Models.Order
             {
                 OrderRef = CreateOrderReference(),

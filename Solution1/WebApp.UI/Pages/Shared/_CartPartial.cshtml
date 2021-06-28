@@ -1,91 +1,91 @@
-﻿@model IEnumerable<WebApp.UI.Models.CartViewModel>
-
-
-<div class="col-md-8 cart" id="cart-main">
-    <div class="title">
-        <div class="row">
-            <div class="col">
-                <h4><b>My Cart</b></h4>
-            </div>
-            <div class="col align-self-center text-right text-muted">3 items</div>
-        </div>
-    </div>
-    @foreach (var product in Model)
-    {
-        <div class="row border-top border-bottom">
-            <div class="row main align-items-center">
-                <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/1GrakTl.jpg"></div>
-                <div class="col">
-                    <div class="row text-muted">Shirt</div>
-                    <div class="row">@product.Name </div>
-                </div>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <div class="col">
-                        <button class="button" type="button"
-                                onclick="removeOneFromCart(event)"
-                                data-product-id="@product.ProductId" data-user-id="@User.Identity.Name">
-                            -
-                        </button>
-                        <a href="#" class="border">@product.Qty</a>
-                        <button class="button" type="button"
-                                onclick="addOneToCart(event)"
-                                data-product-id="@product.ProductId" data-user-id="@User.Identity.Name">
-                            +
-                        </button>
-                    </div>
-                    <div class="col">
-                        &euro; 44.00
-                        <button onclick="removeFromCart(event)"
-                                data-product-id="@product.ProductId" data-user-id="@User.Identity.Name" class="button">
-                            X
-                        </button>
-                    </div>
-                }
-                else
-                {
-                    <div class="col">
-                        <button class="button" type="button"
-                                onclick="removeOneFromCartSession(event)" data-product-id="@product.ProductId" data-quantity="@product.Qty">
-                            -
-                        </button>
-                        <a href="#" class="border">@product.Qty</a>
-                        <button class="button" type="button"
-                                onclick="addOneToCartSession(event)" data-product-id="@product.ProductId" data-quantity="@product.Qty">
-                            +
-                        </button>
-                    </div>
-                    <div class="col">
-                        &euro; 44.00
-                        <button onclick="removeProductFromCartSession(event)" type="button"
-                                data-product-id="@product.ProductId" class="button">
-                            X
-                        </button>
-                    </div>
-                }
-
-            </div>
-            <div class="has-text-right">
-                <a asp-page="/Index" class="button is-text">Ey let me buy some more eh</a>
-                @if (Model.Count() > 0)
-                {
-                    <a asp-page="/Checkout/CustomerImformation" class="btn btn-success is-success">Checkout</a>
-                }
-            </div>
-        </div>
+﻿@*@model IEnumerable<WebApp.UI.Models.CartViewModel>*@
+@model WebApp.UI.Pages.CartModel
+<style>
+    .money {
+        font-size: 18px;
+        font-weight: 500;
+        color: #212121;
     }
+</style>
+<div class="row" id="cart-main">
+    <div class="col-md-8 cart">
+        <div class="title">
+            <div class="row">
+                <div class="col">
+                    <h4><b>Shopping Cart</b></h4>
+                </div>
+                <div class="col align-self-center text-right text-muted">3 items</div>
+            </div>
+        </div>
+        @foreach (var product in Model.CartList)
+        {
+            <div class="row border-top border-bottom">
+                <div class="row main align-items-center">
+                    <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/1GrakTl.jpg"></div>
+                    <div class="col">
+                        <div class="row text-muted">Shirt</div>
+                        <div class="row">@product.Name </div>
+                        <span class="money">₹@product.Value</span>
+                    </div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="col">
+                            <button class="button" type="button"
+                                    onclick="removeOneFromCart(event)"
+                                    data-product-id="@product.ProductId" data-user-id="@User.Identity.Name">
+                                -
+                            </button>
+                            <a href="#" class="border">@product.Qty</a>
+                            <button class="button" type="button"
+                                    onclick="addOneToCart(event)"
+                                    data-product-id="@product.ProductId" data-user-id="@User.Identity.Name">
+                                +
+                            </button>
+                        </div>
+                        <div class="col">
+                            &euro; 44.00
+                            <button onclick="removeFromCart(event)"
+                                    data-product-id="@product.ProductId" data-user-id="@User.Identity.Name" class="button">
+                                X
+                            </button>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col">
+                            <button class="button" type="button"
+                                    onclick="removeOneFromCartSession(event)" data-product-id="@product.ProductId" data-quantity="@product.Qty">
+                                -
+                            </button>
+                            <a href="#" class="border">@product.Qty</a>
+                            <button class="button" type="button"
+                                    onclick="addOneToCartSession(event)" data-product-id="@product.ProductId" data-quantity="@product.Qty">
+                                +
+                            </button>
+                        </div>
+                        <div class="col">
+                            &euro; 44.00
+                            <button onclick="removeProductFromCartSession(event)" type="button"
+                                    data-product-id="@product.ProductId" class="button">
+                                X
+                            </button>
+                        </div>
+                    }
 
+                </div>
 
-    <div class="back-to-shop"><a href="/">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
-</div>
-@*<div class="col-md-4 summary">
+            </div>
+        }
+        <div class="back-to-shop"><a href="#">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
+    </div>
+    <div class="col-md-4 summary">
         <div>
             <h5><b>Summary</b></h5>
         </div>
         <hr>
         <div class="row">
             <div class="col" style="padding-left:0;">ITEMS 3</div>
-            <div class="col text-right">&euro; 132.00</div>
+            <div class="col text-right">&euro; @Model.GetTotalCharge() </div>
         </div>
         <form>
             <p>SHIPPING</p> <select>
@@ -96,5 +96,10 @@
         <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
             <div class="col">TOTAL PRICE</div>
             <div class="col text-right">&euro; 137.00</div>
-        </div> <button class="btn">CHECKOUT</button>
-    </div>*@
+        </div>
+        @if (Model.CartList.Count() > 0)
+        {
+            <a asp-page="/Checkout/CustomerImformation" class="btn btn-success is-success">Checkout</a>
+        }
+    </div>
+</div>

@@ -15,7 +15,7 @@ namespace WebApp.UI.Pages
     public class CartModel : PageModel
     {
         private ISessionManager _sessionManager;
-        public string ApiUrl { get; }       
+        public string ApiUrl { get; }
         public CartModel(ISessionManager sessionManager)
         {
             _sessionManager = sessionManager;
@@ -23,6 +23,10 @@ namespace WebApp.UI.Pages
         }
 
         public IEnumerable<CartViewModel> CartList { get; set; }
+
+        public decimal GetTotalCharge() => CartList.Sum(x => x.Value * x.Qty);
+
+
 
         public async Task<IActionResult> OnGet()
         {
@@ -38,8 +42,8 @@ namespace WebApp.UI.Pages
                 var getUserInfo = await client.GetAsync(cartListUri);
 
                 var resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                var data = JsonConvert.DeserializeObject<IEnumerable<CartViewModel>>(resultuerinfo);
-                CartList = data;
+                var list = JsonConvert.DeserializeObject<IEnumerable<CartViewModel>>(resultuerinfo);
+                CartList = list;
             }
             else
             {
@@ -47,13 +51,13 @@ namespace WebApp.UI.Pages
                     .GetCart(x => new CartViewModel
                     {
                         Name = x.Name,
-                        Value = x.Value.ToString(),
+                        Value = x.Value,
                         RealValue = x.Value,
                         ProductId = x.Id,
                         Qty = x.Qty
                     });
-
                 CartList = list;
+
             }
             return Page();
 

@@ -25,20 +25,16 @@ namespace WebApp.Api.Controllers
         {
             var user = await _identityService.GetUserByEmail(request.UserId);
             var cart = getCart.Do(user.Id);
-
-            var success = await createOrder.Do(new CreateOrder.OrderRequest
+            //decimal GetTotalCharge() => cart.Sum(x => x.Value * x.Qty);
+            request.UserId = user.Id;
+            request.Email = user.Email;
+            
+            request.Stocks = cart.Select(x => new CreateOrder.OrderRequestItems
             {
-                RazorReference = "abc",
-                FirstName = user.UserName,
-                Email = user.UserName,
-                PhoneNumber = user.PhoneNumber,
-
-                Stocks = cart.Select(x => new CreateOrder.OrderRequestItems
-                {
-                    ProductId = x.ProductId,
-                    Qty = x.Qty
-                }).ToList()
-            });
+                ProductId = x.ProductId,
+                Qty = x.Qty
+            }).ToList();
+            var success = await createOrder.Do(request);
 
             if (success)
             {

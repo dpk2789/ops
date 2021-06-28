@@ -18,6 +18,7 @@ namespace Aow.Application.Cart
         {
             public string Name { get; set; }
             public decimal Value { get; set; }
+            public decimal Amount { get; set; }
             public decimal RealValue { get; set; }
             public int Qty { get; set; }
             public Guid ProductId { get; set; }
@@ -29,7 +30,7 @@ namespace Aow.Application.Cart
                 .GetCartProducts(userId, x => new Response
                 {
                     Name = x.Product.Name,
-                    Value = x.Value,
+                    Value = x.Product.Value,                   
                     RealValue = x.Value,
                     ProductId = x.ProductId,
                     Qty = x.Qty
