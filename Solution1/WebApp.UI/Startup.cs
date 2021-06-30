@@ -56,11 +56,13 @@ namespace WebApp.UI
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();                
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseDeveloperExceptionPage();
+                //app.UseExceptionHandler("/Error");
+                //app.UseHsts();
                 //app.UseExceptionHandler(errorApp =>
                 //{
                 //    errorApp.Run(async context =>
@@ -84,7 +86,7 @@ namespace WebApp.UI
                 //        await context.Response.WriteAsync(new string(' ', 512)); // IE padding
                 //    });
                 //});
-                app.UseHsts();
+
             }
 
             app.UseHttpsRedirection();

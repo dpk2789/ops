@@ -26,8 +26,6 @@ namespace WebApp.UI.Pages
 
         public decimal GetTotalCharge() => CartList.Sum(x => x.Value * x.Qty);
 
-
-
         public async Task<IActionResult> OnGet()
         {
             if (User.Identity.IsAuthenticated)

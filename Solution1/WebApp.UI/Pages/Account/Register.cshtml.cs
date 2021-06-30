@@ -18,26 +18,28 @@ using WebApp.UI.Models;
 namespace WebApp.UI.Pages.Account
 {
     [AllowAnonymous]
-    public abstract class RegisterModel : PageModel
-    {      
+    public class RegisterModel : PageModel
+    {
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
-        protected RegisterModel(          
-            ILogger<RegisterModel> logger , IEmailSender emailSender)
+        public RegisterModel(
+            ILogger<RegisterModel> logger, IEmailSender emailSender)
         {
             _emailSender = emailSender;
-            _logger = logger;         
+            _logger = logger;
         }
 
         [BindProperty]
         public InputModel Input { get; set; }
 
+        [TempData]
+        public string ErrorMessage { get; set; }
         public string ReturnUrl { get; private set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
-        public abstract class InputModel
+        public class InputModel
         {
             [Required]
             [EmailAddress]
@@ -56,10 +58,21 @@ namespace WebApp.UI.Pages.Account
             public string ConfirmPassword { get; set; }
         }
 
-        public  void OnGetAsync(string returnUrl = null)
+
+        public IActionResult OnGetAsync(string returnUrl = null)
         {
-            ReturnUrl = returnUrl;           
+            if (!string.IsNullOrEmpty(ErrorMessage))
+            {
+                ModelState.AddModelError(string.Empty, ErrorMessage);
+            }
+
+            returnUrl = returnUrl ?? Url.Content("~/");
+
+
+            ReturnUrl = returnUrl;
+            return Page();
         }
+
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
@@ -68,22 +81,25 @@ namespace WebApp.UI.Pages.Account
             using var client = new HttpClient();
             var u = new Uri(ApiUrls.Identity.Register);
 
-            var json = JsonConvert.SerializeObject(new { Input.Email, Input.Password , Input.ConfirmPassword });
+            var json = JsonConvert.SerializeObject(new { Input.Email, Input.Password, Input.ConfirmPassword });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             //HTTP POST
             var postTask = await client.PostAsync(u, content);
             //postTask.Wait();
             var result = postTask.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            var data = JsonConvert.DeserializeObject<AuthRegiterResponse>(result);                 
-                 
-            var callbackUrl = Url.ActionLink(
-                "/Account/ConfirmEmail",
-                values: new { userId = data.UserId, code = data.Msg, returnUrl },
-                protocol: Request.Scheme);
+            var data = JsonConvert.DeserializeObject<AuthRegiterResponse>(result);
+
+            //var callbackUrl = Url.ActionLink(
+            //    "Account/ConfirmEmail",
+            //    values: new { userId = data.UserId, code = data.Msg, returnUrl },
+            //    protocol: Request.Scheme);
+
+            var url = "https://localhost:44324/Account/ConfirmEmail?userId=" + data.UserId + "&code=" + data.Msg;
+            var link = $"<a href='{url}'>Click here</a>";
 
             await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(url)}'>clicking here</a>.");
 
             if (data.Success)
             {

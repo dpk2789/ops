@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using WebApp.UI.Helpers;
 using WebApp.UI.Models;
 using WebApp.UI.Models.cart;
+using WebApp.UI.Pages;
 using static WebApp.UI.Pages.Products.IndexModel;
 
 namespace WebApp.UI.Controllers
@@ -68,8 +69,10 @@ namespace WebApp.UI.Controllers
 
                 string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 var data = JsonConvert.DeserializeObject<IEnumerable<CartViewModel>>(resultuerinfo);
-                var CartList = data;
-                return PartialView("_CartPartial", CartList);
+               // var CartList = data;
+                CartModel cartModel = new CartModel(_sessionManager);
+                cartModel.CartList = data;
+                return PartialView("_CartPartial", cartModel);
             }
             else
             {
