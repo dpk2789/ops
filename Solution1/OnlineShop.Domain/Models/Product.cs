@@ -7,6 +7,9 @@ namespace OnlineShop.Domain.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public string PageTitle { get; set; }
+        public string Description { get; set; }
+        public string Specifications { get; set; }
         public decimal Value { get; set; }
         public ICollection<ProductImage> ProductImages { get; set; }
     }
