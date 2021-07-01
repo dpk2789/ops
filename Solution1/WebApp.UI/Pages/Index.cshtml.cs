@@ -15,7 +15,7 @@ namespace WebApp.UI.Pages
     public class IndexModel : PageModel
     {
         private ISessionManager _sessionManager;
-        public string ApiUrl { get; }      
+        public string ApiUrl { get; }
         public IndexModel(ISessionManager sessionManager, ILogger<IndexModel> logger)
         {
             _sessionManager = sessionManager;
@@ -38,37 +38,31 @@ namespace WebApp.UI.Pages
 
         public async Task OnGet()
         {
-            using (var client = new HttpClient())
+            using var client = new HttpClient();
+            var cartList = _sessionManager.GetCart(x => new ProductViewModel
             {
-                var cartList = _sessionManager
-              .GetCart(x => new ProductViewModel
-              {
-                  Name = x.Name,
-                  Value = x.Value,
-                  Id = x.ProductId,
-              });             
-             
-                Uri getProductsUri = new Uri(ApiUrls.Product.GetProducts);              
+                Name = x.Name,
+                Value = x.Value,
+                Id = x.ProductId,
+            });
 
-                var getUserInfo = await client.GetAsync(getProductsUri);
+            Uri getProductsUri = new Uri(ApiUrls.Product.GetProducts);
+            var getUserInfo = await client.GetAsync(getProductsUri);
 
-                string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                var data = JsonConvert.DeserializeObject<IEnumerable<ProductViewModel>>(resultuerinfo);
-                Products = data;
+            string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var data = JsonConvert.DeserializeObject<IEnumerable<ProductViewModel>>(resultuerinfo);
+            Products = data;
 
-                foreach (var product in Products)
+            foreach (var product in Products)
+            {
+                if (cartList.Any(x => x.Id == product.Id))
                 {
-                    if (cartList.Any(x => x.Id == product.Id))
-                    {
-                        product.IsInCart = true;
-                    }
-                    else
-                    {
-                        product.IsInCart = false;
-                    }
+                    product.IsInCart = true;
                 }
-
-
+                else
+                {
+                    product.IsInCart = false;
+                }
             }
         }
     }

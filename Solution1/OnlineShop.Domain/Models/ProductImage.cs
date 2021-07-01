@@ -6,6 +6,7 @@ namespace OnlineShop.Domain.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public string Type { get; set; }
         public string Extention { get; set; }
         public decimal Path { get; set; }
         public Guid ProductId { get; set; }

@@ -35,14 +35,29 @@ namespace WebApp.UI.Pages.Admin.Products
             public decimal Value { get; set; }           
             public IEnumerable<IFormFile> Files { get; set; }
         }
-
+        private List<ProductImage> ProductImages;
         public async Task<IActionResult> OnPost()
-        {           
+        {          
             foreach (var file in Input.Files)
             {
-                using var fileStream = new FileStream(Path.Combine(_dir + "/pics", file.FileName), FileMode.Create, FileAccess.Write);
+                var save_path = Path.Combine(_env.WebRootPath, file.FileName);
+                using var fileStream = new FileStream(save_path, FileMode.Create, FileAccess.Write);
                 file.CopyTo(fileStream);
+                ProductImage image = new ProductImage();
+                image.Id = Guid.NewGuid();
+                image.Width = (int)file.Length;
+                image.RelativePath = $"/{file.FileName}";
+                image.GlobalPath = save_path;
+                ProductImages.Add(image);
+                //ProductImages.Add(new ProductImage
+                //{
+                //    Id = Guid.NewGuid(),
+                //    Width = (int)file.Length,
+                //    RelativePath = $"/{file.FileName}",
+                //    GlobalPath = save_path
+                //});
             }
+            
             if (!ModelState.IsValid) return Page();
             using var client = new HttpClient();
             var addProductsUri = new Uri(ApiUrls.Product.Create);
