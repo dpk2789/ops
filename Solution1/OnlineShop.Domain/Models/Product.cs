@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace OnlineShop.Domain.Models
 {
@@ -7,5 +8,6 @@ namespace OnlineShop.Domain.Models
         public Guid Id { get; set; }
         public string Name { get; set; }
         public decimal Value { get; set; }
+        public ICollection<ProductImage> ProductImages { get; set; }
     }
 }

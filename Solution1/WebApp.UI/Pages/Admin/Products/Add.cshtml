@@ -3,7 +3,7 @@
 @{
 }
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <h4>Add New Product</h4>
     <hr />
     <div asp-validation-summary="All" class="text-danger"></div>
@@ -21,10 +21,16 @@
         </div>
         <span asp-validation-for="Input.Value" class="text-danger"></span>
     </div>
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">Multi File Upload</label>
+        <div class="col-sm-6">
+            <input type="file" asp-for="Input.Files" multiple />
+        </div>
 
+    </div>
     <div class="d-grid gap-2 d-md-flex offset-6">
         <button class="btn btn-primary me-md-2" type="button">Cancel</button>
         <button type="submit" class="btn btn-primary">Add Product</button>
     </div>
-  
+
 </form>
