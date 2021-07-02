@@ -10,7 +10,7 @@ namespace WebApp.UI.Helpers
     public class FileManager
     {
         private IWebHostEnvironment _env;
-        private List<ProductImage> Files;
+        private List<ProductImageFileManager> Files;
         private int Id;
 
         private readonly List<(int Width, int Height)> imgSizes = new List<(int, int)>
@@ -24,14 +24,14 @@ namespace WebApp.UI.Helpers
         public FileManager(IWebHostEnvironment env)
         {
             _env = env;
-            Files = new List<ProductImage>();
+            Files = new List<ProductImageFileManager>();
         }
 
-        public ProductImage GetFile(Guid id) => Files.FirstOrDefault(x => x.Id == id);
+        public ProductImageFileManager GetFile(Guid id) => Files.FirstOrDefault(x => x.Id == id);
 
-        public ProductImage GetFile(Guid id, int width) => Files.FirstOrDefault(x => x.Id == id && x.Width == width);
+        public ProductImageFileManager GetFile(Guid id, int width) => Files.FirstOrDefault(x => x.Id == id && x.Width == width);
 
-        public IEnumerable<ProductImage> GetFiles() => Files;
+        public IEnumerable<ProductImageFileManager> GetFiles() => Files;
 
         public IEnumerable<Guid> GetOptimizedFiles() =>
             Files
@@ -49,7 +49,7 @@ namespace WebApp.UI.Helpers
                 file.CopyTo(fileStream);
             }
 
-            Files.Add(new ProductImage
+            Files.Add(new ProductImageFileManager
             {
                 Id = Guid.NewGuid(),
                 Width= (int)file.Length,
@@ -80,11 +80,15 @@ namespace WebApp.UI.Helpers
         }
     }
 
-    public class ProductImage
+    public class ProductImageFileManager
     {
         public Guid Id { get; set; }
+        public string ProductId { get; set; }
+        public string Name { get; set; }
         public int? Width { get; set; }
         public string RelativePath { get; set; }
         public string GlobalPath { get; set; }
+        public string Type { get; set; }
+        public string Extention { get; set; }
     }
 }

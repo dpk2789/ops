@@ -46,7 +46,7 @@ namespace WebApp.UI.Pages
                 Id = x.ProductId,
             });
 
-            Uri getProductsUri = new Uri(ApiUrls.Product.GetProducts);
+            var getProductsUri = new Uri(ApiUrls.Product.GetProducts);
             var getUserInfo = await client.GetAsync(getProductsUri);
 
             string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
@@ -55,13 +55,17 @@ namespace WebApp.UI.Pages
 
             foreach (var product in Products)
             {
-                if (cartList.Any(x => x.Id == product.Id))
+                if (cartList != null)
                 {
-                    product.IsInCart = true;
-                }
-                else
-                {
-                    product.IsInCart = false;
+                    var productViewModels = cartList.ToList();
+                    if (productViewModels.Any(x => x.Id == product.Id))
+                    {
+                        product.IsInCart = true;
+                    }
+                    else
+                    {
+                        product.IsInCart = false;
+                    }
                 }
             }
         }

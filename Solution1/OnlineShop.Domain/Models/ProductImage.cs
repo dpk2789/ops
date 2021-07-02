@@ -8,9 +8,11 @@ namespace OnlineShop.Domain.Models
         public string Name { get; set; }
         public string Type { get; set; }
         public string Extention { get; set; }
-        public decimal Path { get; set; }
+        public long Length { get; set; }
+        public string RelativePath { get; set; }
+        public string GlobalPath { get; set; }
         public Guid ProductId { get; set; }
-        public Order Order { get; set; }
+        public Product Order { get; set; }
 
     }
 }
