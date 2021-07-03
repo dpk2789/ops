@@ -11,6 +11,6 @@ namespace OnlineShop.Domain.Models
         public string Description { get; set; }
         public string Specifications { get; set; }
         public decimal Value { get; set; }
-        public ICollection<ProductImage> ProductImages { get; set; }
+        public IList<ProductImage> ProductImages { get; set; }
     }
 }

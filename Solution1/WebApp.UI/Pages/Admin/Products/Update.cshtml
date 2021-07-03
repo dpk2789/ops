@@ -3,11 +3,13 @@
 @{
 }
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <h4>Update Product</h4>
     <hr />
     <div asp-validation-summary="All" class="text-danger"></div>
-    <input type="hidden" asp-for="Input.Id"/>
+    <input type="hidden" asp-for="Input.Id" />
+
+    <img src="@Model.Input.ProductImages.FirstOrDefault()?.RelativePath" class="figure-img img-fluid rounded" style="width:1000px;height:500px" alt="...">
     <div class="mb-3 row">
         <label asp-for="Input.Name" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-6">
@@ -16,13 +18,26 @@
         <span asp-validation-for="Input.Name" class="text-danger"></span>
     </div>
     <div class="mb-3 row">
+        <label asp-for="Input.Description" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-6">
+            <input asp-for="Input.Description" class="form-control" />
+        </div>
+        <span asp-validation-for="Input.Description" class="text-danger"></span>
+    </div>
+    <div class="mb-3 row">
         <label asp-for="Input.Value" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-6">
             <input asp-for="Input.Value" class="form-control" />
         </div>
         <span asp-validation-for="Input.Value" class="text-danger"></span>
     </div>
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">Main Display Upload</label>
+        <div class="col-sm-6">
+            <input type="file" asp-for="Input.File" />
+        </div>
 
+    </div>
     <div class="d-grid gap-2 d-md-flex offset-6">
         <button class="btn btn-primary me-md-2" type="button">Cancel</button>
         <button type="submit" class="btn btn-primary">Update Product</button>

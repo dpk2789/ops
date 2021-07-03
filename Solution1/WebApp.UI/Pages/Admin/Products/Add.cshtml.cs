@@ -36,7 +36,7 @@ namespace WebApp.UI.Pages.Admin.Products
             public IEnumerable<IFormFile> Files { get; set; }
         }
         public class ProductImage
-        {           
+        {
             public Guid ProductId { get; set; }
             public string Name { get; set; }
             public long Width { get; set; }
@@ -50,7 +50,6 @@ namespace WebApp.UI.Pages.Admin.Products
             if (!ModelState.IsValid) return Page();
             using var client = new HttpClient();
             var addProductsUri = new Uri(ApiUrls.Product.Create);
-            Input.Description = "sample";
             var productImages = new List<ProductImage>();
             foreach (var file in Input.Files)
             {
@@ -58,13 +57,15 @@ namespace WebApp.UI.Pages.Admin.Products
                 using var fileStream = new FileStream(save_path, FileMode.Create, FileAccess.Write);
                 file.CopyTo(fileStream);
                 productImages.Add(new ProductImage
-                {                    
+                {
+                    Name = file.FileName,
                     Width = file.Length,
                     RelativePath = $"/{file.FileName}",
-                    GlobalPath = save_path
+                    GlobalPath = save_path,
+                    Type = "main"
                 });
             }
-            var json = JsonConvert.SerializeObject(new { Input.Name, Input.Value, Input.Description , productImages });
+            var json = JsonConvert.SerializeObject(new { Input.Name, Input.Value, Input.Description, productImages });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var userAccessToken = User.Claims.FirstOrDefault(x => x.Type == "AcessToken")?.Value;

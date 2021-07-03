@@ -44,12 +44,12 @@ namespace WebApp.Api.Controllers
 
         [Authorize]
         [HttpPut("api/Products/UpdateProduct")]
-        public async Task<IActionResult> UpdateProduct([FromBody] UpdateProduct.Request request, [FromServices] UpdateProduct updateProduct)
+        public async Task<IActionResult> UpdateProduct([FromBody] UpdateProduct.UpdateProductRequest request, [FromServices] UpdateProduct updateProduct)
         {
             try
             {
                 var response = await updateProduct.Do(request);
-                return Ok(new UpdateProduct.Response
+                return Ok(new UpdateProduct.UpdateProductResponse
                 {
                     Id = response.Id,
                     Name = response.Name,
@@ -58,9 +58,9 @@ namespace WebApp.Api.Controllers
                 });
 
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 

@@ -15,6 +15,13 @@
         <span asp-validation-for="Input.Name" class="text-danger"></span>
     </div>
     <div class="mb-3 row">
+        <label asp-for="Input.Description" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-6">
+            <input asp-for="Input.Description" class="form-control" />
+        </div>
+        <span asp-validation-for="Input.Description" class="text-danger"></span>
+    </div>
+    <div class="mb-3 row">
         <label asp-for="Input.Value" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-6">
             <input asp-for="Input.Value" class="form-control" />
@@ -22,7 +29,7 @@
         <span asp-validation-for="Input.Value" class="text-danger"></span>
     </div>
     <div class="mb-3 row">
-        <label class="col-sm-2 col-form-label">Multi File Upload</label>
+        <label class="col-sm-2 col-form-label">Main Display Upload</label>
         <div class="col-sm-6">
             <input type="file" asp-for="Input.Files" multiple />
         </div>

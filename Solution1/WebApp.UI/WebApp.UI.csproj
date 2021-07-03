@@ -5,13 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.15" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
-    <PackageReference Include="RazorPay.Core" Version="1.0.2" />
+    <Compile Remove="wwwroot\pics\**" />
+    <Content Remove="wwwroot\pics\**" />
+    <EmbeddedResource Remove="wwwroot\pics\**" />
+    <None Remove="wwwroot\pics\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\pics\" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.15" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="RazorPay.Core" Version="1.0.2" />
   </ItemGroup>
 
 </Project>

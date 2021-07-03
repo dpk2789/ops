@@ -33,7 +33,6 @@ namespace Aow.Application.ProductAdmin
             public string GlobalPath { get; set; }
             public string Extention { get; set; }            
             public decimal Path { get; set; }
-
         }
         public class CreateResponse
         {
@@ -53,6 +52,7 @@ namespace Aow.Application.ProductAdmin
 
                 ProductImages = request.ProductImages.Select(x => new ProductImage
                 {
+                    Id= Guid.NewGuid(),
                     ProductId = ProductId,
                     Name = x.Name,
                     GlobalPath = x.GlobalPath,

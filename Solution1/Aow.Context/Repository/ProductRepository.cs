@@ -1,5 +1,4 @@
-﻿
-
+﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.Domain.Interface;
 using OnlineShop.Domain.Models;
 using System;
@@ -24,6 +23,12 @@ namespace Aow.Context.Repository
             return _ctx.SaveChangesAsync();
         }
 
+        public Task<int> AddProductImage(ProductImage image)
+        {
+            _ctx.ProductImages.Add(image);
+            return _ctx.SaveChangesAsync();
+        }
+
         public Task<int> DeleteProduct(Guid id)
         {
             var product = _ctx.Products.FirstOrDefault(x => x.Id == id);
@@ -41,7 +46,7 @@ namespace Aow.Context.Repository
         public TResult GetProductById<TResult>(Guid id, Func<Product, TResult> selector)
         {
             return _ctx.Products
-                .Where(x => x.Id == id)
+                .Where(x => x.Id == id).Include(x => x.ProductImages)
                 .Select(selector)
                 .FirstOrDefault();
         }
@@ -59,7 +64,7 @@ namespace Aow.Context.Repository
         public IEnumerable<TResult> GetProductsWithStock<TResult>(
             Func<Product, TResult> selector)
         {
-            return _ctx.Products                
+            return _ctx.Products.Include(x => x.ProductImages)
                 .Select(selector)
                 .ToList();
         }

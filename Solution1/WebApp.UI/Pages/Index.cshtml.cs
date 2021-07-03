@@ -34,6 +34,18 @@ namespace WebApp.UI.Pages
             public string Name { get; set; }
             public decimal Value { get; set; }
             public bool IsInCart { get; set; }
+            public IEnumerable<ProductImage> ProductImages { get; set; }
+        }
+
+        public class ProductImage
+        {
+            public Guid ProductId { get; set; }
+            public string Name { get; set; }
+            public long Width { get; set; }
+            public string RelativePath { get; set; }
+            public string GlobalPath { get; set; }
+            public string Type { get; set; }
+            public string Extention { get; set; }
         }
 
         public async Task OnGet()

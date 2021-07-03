@@ -10,6 +10,7 @@ namespace OnlineShop.Domain.Interface
         Task<int> CreateProduct(Product product);
         Task<int> DeleteProduct(Guid id);
         Task<int> UpdateProduct(Product product);
+        Task<int> AddProductImage(ProductImage image);
 
         TResult GetProductById<TResult>(Guid id, Func<Product, TResult> selector);
         TResult GetProductByName<TResult>(string name, Func<Product, TResult> selector);
