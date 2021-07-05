@@ -37,10 +37,7 @@ namespace WebApp.UI.Pages
         public async Task<IActionResult> OnGet(Guid id)
         {
             using var client = new HttpClient();
-            var updateProductsUri = new Uri(ApiUrls.Product.GetProduct + "?id=" + id);
-
-            var userAccessToken = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
+            var updateProductsUri = new Uri(ApiUrls.Product.GetProduct + "?id=" + id);           
 
             var postTask = await client.GetAsync(updateProductsUri);
             var result = postTask.Content.ReadAsStringAsync().GetAwaiter().GetResult();
