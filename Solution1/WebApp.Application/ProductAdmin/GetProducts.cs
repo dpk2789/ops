@@ -22,6 +22,7 @@ namespace Aow.Application.ProductAdmin
                 Id = x.Id,
                 Name = x.Name,
                 Value = x.Value,
+                Description = x.Description,
 
                 ProductImages = x.ProductImages.Select(y => new ProductImageResponse
                 {
@@ -39,6 +40,7 @@ namespace Aow.Application.ProductAdmin
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
+            public string Description { get; set; }
             public decimal Value { get; set; }
             public IEnumerable<ProductImageResponse> ProductImages { get; set; }
         }

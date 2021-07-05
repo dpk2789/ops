@@ -7,14 +7,19 @@
 <div class="row row-cols-1 row-cols-md-2 g-4">
     @foreach (var product in Model.Products)
     {
+
+
         <div class="col">
             <div class="card">
-                <img src="@product.ProductImages.FirstOrDefault()?.RelativePath" class="card-img-top" alt="...">
+                @if (product.ProductImages != null)
+                {
+                    <img src="@product.ProductImages.FirstOrDefault()?.RelativePath" class="card-img-top" alt="...">
+                }
+
                 <div class="card-body">
                     <h5 class="card-title">@product.Name</h5>
                     <p class="card-text">
-                        This is a longer card with supporting text below as a natural lead-in to additional content.
-                        This content is a little bit longer.
+                        @product.Description
                     </p>
                     @{ if (User.Identity.IsAuthenticated)
                         {
@@ -37,7 +42,7 @@
                         }
                     }
 
-                    <a href="#" class="btn btn-info">See Details</a>
+                    <a asp-page="Product" asp-route-id="@product.Id" class="btn btn-info">See Details</a>
                 </div>
             </div>
         </div>

@@ -32,6 +32,7 @@ namespace WebApp.UI.Pages
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
+            public string Description { get; set; }
             public decimal Value { get; set; }
             public bool IsInCart { get; set; }
             public IEnumerable<ProductImage> ProductImages { get; set; }
@@ -50,20 +51,21 @@ namespace WebApp.UI.Pages
 
         public async Task OnGet()
         {
-            using var client = new HttpClient();
-            var cartList = _sessionManager.GetCart(x => new ProductViewModel
-            {
-                Name = x.Name,
-                Value = x.Value,
-                Id = x.ProductId,
-            });
 
+            using var client = new HttpClient();
             var getProductsUri = new Uri(ApiUrls.Product.GetProducts);
             var getUserInfo = await client.GetAsync(getProductsUri);
 
             string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             var data = JsonConvert.DeserializeObject<IEnumerable<ProductViewModel>>(resultuerinfo);
             Products = data;
+
+            var cartList = _sessionManager.GetCart(x => new ProductViewModel
+            {
+                Name = x.Name,
+                Value = x.Value,
+                Id = x.ProductId,
+            });
 
             foreach (var product in Products)
             {
@@ -80,6 +82,7 @@ namespace WebApp.UI.Pages
                     }
                 }
             }
+
         }
     }
 }
