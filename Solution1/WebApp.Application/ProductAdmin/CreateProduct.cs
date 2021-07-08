@@ -44,7 +44,7 @@ namespace Aow.Application.ProductAdmin
         public async Task<CreateResponse> Do(CreateRequest request)
         {
             Guid ProductId = Guid.NewGuid();
-            var product = new Product
+            var product = new OnlineShop.Domain.Models.Product
             {
                 Id = ProductId,
                 Name = request.Name,

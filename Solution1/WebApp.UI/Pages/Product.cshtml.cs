@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -34,10 +32,10 @@ namespace WebApp.UI.Pages
             public string Extention { get; set; }
         }
 
-        public async Task<IActionResult> OnGet(Guid id)
+        public async Task<IActionResult> OnGet(string name)
         {
             using var client = new HttpClient();
-            var updateProductsUri = new Uri(ApiUrls.Product.GetProduct + "?id=" + id);           
+            var updateProductsUri = new Uri(ApiUrls.Product.GetProductByName + "?name=" + name.Replace("-", " "));           
 
             var postTask = await client.GetAsync(updateProductsUri);
             var result = postTask.Content.ReadAsStringAsync().GetAwaiter().GetResult();

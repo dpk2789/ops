@@ -69,7 +69,7 @@ namespace WebApp.UI.Controllers
 
                 string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 var data = JsonConvert.DeserializeObject<IEnumerable<CartViewModel>>(resultuerinfo);
-               // var CartList = data;
+                // var CartList = data;
                 CartModel cartModel = new CartModel(_sessionManager);
                 cartModel.CartList = data;
                 return PartialView("_CartPartial", cartModel);

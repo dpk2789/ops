@@ -33,7 +33,10 @@ namespace WebApp.UI.Pages.Admin.Products
             public string Name { get; set; }
             public string Description { get; set; }
             public decimal Value { get; set; }
-            public IEnumerable<IFormFile> Files { get; set; }
+            public IEnumerable<IFormFile> MainFiles { get; set; }
+            public IFormFile BackImage { get; set; }
+            public IFormFile FrontImage { get; set; }
+            public IFormFile PackingImage { get; set; }
         }
         public class ProductImage
         {
@@ -51,7 +54,7 @@ namespace WebApp.UI.Pages.Admin.Products
             using var client = new HttpClient();
             var addProductsUri = new Uri(ApiUrls.Product.Create);
             var productImages = new List<ProductImage>();
-            foreach (var file in Input.Files)
+            foreach (var file in Input.MainFiles)
             {
                 var save_path = Path.Combine(_env.WebRootPath, file.FileName);
                 using var fileStream = new FileStream(save_path, FileMode.Create, FileAccess.Write);

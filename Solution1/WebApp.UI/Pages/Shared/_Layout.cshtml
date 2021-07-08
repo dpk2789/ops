@@ -4,12 +4,23 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google-site-verification" content="VRPP4cx0n0hfLm0ooMuS_ZICh9GdJnuM-uamDqNhuUc" />
+    <meta name="msvalidate.01" content="A3D811726535683B32195DD9F598F648" />
     <title>@ViewData["Title"] - Packaging Boxes E-Shop | Corrugated Boxes | Pizza Boxes | Kraft Box | Duplex Box</title>
-    <meta property="description" name="description" 
-    content="India's biggest online store for Packaging Boxes, Fashion (Clothes/Shoes), 
+    <meta name="description"
+          content="India's biggest online store for Packaging Boxes, Fashion (Clothes/Shoes),
     Personal Care and more! Find the largest selection from all brands at the lowest prices in India.
     Payment options - COD, EMI, Credit card, Debit card &amp;amp; more.">
+
     <meta name="Keywords" content="Packaging Boxes , Pizza Box ,Online Shopping in India,online Shopping store,Online Shopping Site,Buy Online,Shop Online,Online Shopping,Robust Packaging Eshop">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FDSZG7BMRE"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-FDSZG7BMRE');
+    </script>
     <link href="~/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
@@ -29,14 +40,14 @@
                         </li>
                         @if (Context.User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="Admin/Products/Index">Products</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-page="/Admin/Products/Index">
-                                    Admin
-                                </a>
-                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="Admin/Products/Index">Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-page="/Admin/Products/Index">
+                                Admin
+                            </a>
+                        </li>
 
                         }
                         <li class="nav-item">
@@ -49,26 +60,26 @@
 
                         @if (Context.User.Identity.IsAuthenticated)
                         {
-                            <span class="navbar-text">
-                                Welcome @User.Identity.Name
-                            </span>
-                            <ul class="navbar-nav ms-auto flex-nowrap flex-grow-1 text-right">
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="UserAccount" asp-action="Logout">Sign Out</a>
-                                </li>
-                            </ul>
+                        <span class="navbar-text">
+                            Welcome @User.Identity.Name
+                        </span>
+                        <ul class="navbar-nav ms-auto flex-nowrap flex-grow-1 text-right">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="UserAccount" asp-action="Logout">Sign Out</a>
+                            </li>
+                        </ul>
                         }
                         else
                         {
-                            <ul class="navbar-nav ms-auto flex-nowrap flex-grow-1 text-right">
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="Account/Login">Login</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="Account/Register">Register</a>
-                                </li>
+                        <ul class="navbar-nav ms-auto flex-nowrap flex-grow-1 text-right">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="Account/Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="Account/Register">Register</a>
+                            </li>
 
-                            </ul>
+                        </ul>
                         }
                     </div>
 

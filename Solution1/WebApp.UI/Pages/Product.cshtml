@@ -1,15 +1,15 @@
-﻿@page
+﻿@page "{name}"
 @model WebApp.UI.Pages.ProductModel
 @{
+    ViewData["Title"] = Model.Input.Name;
 }
-
 
 <div class="card">
     <div class="row no-gutters">
         <aside class="col-md-6">
             <article class="gallery-wrap">
                 <div class="img-big-wrap">
-                    <a href="#"><img src="@Model.Input.ProductImages.FirstOrDefault()?.RelativePath"></a>
+                    <a href="#"><img src="@Model.Input.ProductImages.FirstOrDefault()?.RelativePath" class="card-img-top"></a>
                 </div> <!-- img-big-wrap.// -->
                 <div class="thumbs-wrap">
                     <a href="#" class="item-thumb"> <img src="../images/items/12-1.jpg"></a>

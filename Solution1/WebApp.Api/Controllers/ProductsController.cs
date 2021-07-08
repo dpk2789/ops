@@ -1,4 +1,5 @@
-﻿using Aow.Application.ProductAdmin;
+﻿using Aow.Application.Product;
+using Aow.Application.ProductAdmin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,8 +20,15 @@ namespace WebApp.Api.Controllers
 
         [HttpGet("api/Products/GetProduct")]
         public IActionResult GetProduct(Guid id,
-           [FromServices] GetProduct getProduct) =>
+           [FromServices] GetProductAdmin getProduct) =>
            Ok(getProduct.Do(id));
+
+        [HttpGet("api/Products/GetProductByName")]
+        public IActionResult GetProductByName(string name,
+          [FromServices] GetProduct getProduct)
+        {
+            return Ok(getProduct.Do(name));
+        }
 
         [Authorize]
         [HttpPost("api/Products/CreateProduct")]

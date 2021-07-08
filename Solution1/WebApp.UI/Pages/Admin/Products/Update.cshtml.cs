@@ -33,7 +33,10 @@ namespace WebApp.UI.Pages.Products
             public string Name { get; set; }
             public string Description { get; set; }
             public decimal Value { get; set; }
-            public IFormFile File { get; set; }          
+            public IFormFile File { get; set; }
+            public IFormFile BackImage { get; set; }
+            public IFormFile FrontImage { get; set; }
+            public IFormFile PackingImage { get; set; }
             public IEnumerable<ProductImage> ProductImages { get; set; }
         }
         public class ProductImage
@@ -79,7 +82,49 @@ namespace WebApp.UI.Pages.Products
                     GlobalPath = save_path,
                     Type = "main"
                 });
+            }
+            if (Input.FrontImage != null)
+            {
+                var save_path = Path.Combine(_env.WebRootPath, Input.FrontImage.FileName);
+                using var fileStream = new FileStream(save_path, FileMode.Create, FileAccess.Write);
+                Input.File.CopyTo(fileStream);
+                productImages.Add(new ProductImage
+                {
+                    Name = Input.FrontImage.FileName,
+                    Width = Input.FrontImage.Length,
+                    RelativePath = $"/{Input.FrontImage.FileName}",
+                    GlobalPath = save_path,
+                    Type = "front"
+                });
             }           
+            if (Input.BackImage != null)
+            {
+                var save_path = Path.Combine(_env.WebRootPath, Input.BackImage.FileName);
+                using var fileStream = new FileStream(save_path, FileMode.Create, FileAccess.Write);
+                Input.File.CopyTo(fileStream);
+                productImages.Add(new ProductImage
+                {
+                    Name = Input.BackImage.FileName,
+                    Width = Input.BackImage.Length,
+                    RelativePath = $"/{Input.BackImage.FileName}",
+                    GlobalPath = save_path,
+                    Type = "back"
+                });
+            }
+            if (Input.PackingImage != null)
+            {
+                var save_path = Path.Combine(_env.WebRootPath, Input.PackingImage.FileName);
+                using var fileStream = new FileStream(save_path, FileMode.Create, FileAccess.Write);
+                Input.File.CopyTo(fileStream);
+                productImages.Add(new ProductImage
+                {
+                    Name = Input.PackingImage.FileName,
+                    Width = Input.PackingImage.Length,
+                    RelativePath = $"/{Input.PackingImage.FileName}",
+                    GlobalPath = save_path,
+                    Type = "packing"
+                });
+            }
             using var client = new HttpClient();
             var addProductsUri = new Uri(ApiUrls.Product.Update);
             

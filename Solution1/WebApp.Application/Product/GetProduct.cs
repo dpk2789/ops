@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Aow.Application.ProductAdmin
+namespace Aow.Application.Product
 {
     [Service]
     public class GetProduct
@@ -33,10 +33,10 @@ namespace Aow.Application.ProductAdmin
             public string Type { get; set; }
             public string Extention { get; set; }
         }
-       
-        public GetProductViewModel Do(Guid id)
+
+        public GetProductViewModel Do(string name)
         {
-            return _productManager.GetProductById(id, x => new GetProductViewModel
+            var product = _productManager.GetProductByName(name, x => new GetProductViewModel
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -50,9 +50,11 @@ namespace Aow.Application.ProductAdmin
                     RelativePath = y.RelativePath,
                 }),
             });
+
+            return product;
         }
 
     }
 
-    
+
 }

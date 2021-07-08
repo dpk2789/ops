@@ -51,14 +51,14 @@ namespace Aow.Context.Repository
                 .FirstOrDefault();
         }
 
-        public TResult GetProductByName<TResult>(
-            string name,
-            Func<Product, TResult> selector)
+        public TResult GetProductByName<TResult>(string name, Func<Product, TResult> selector)
         {
-            return _ctx.Products              
-                .Where(x => x.Name == name)
+            var result = _ctx.Products
+                .Where(x => x.Name == name).Include(x => x.ProductImages)
                 .Select(selector)
                 .FirstOrDefault();
+
+            return result;
         }
 
         public IEnumerable<TResult> GetProductsWithStock<TResult>(

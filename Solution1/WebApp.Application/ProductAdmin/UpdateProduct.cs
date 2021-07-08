@@ -43,45 +43,38 @@ namespace Aow.Application.ProductAdmin
         public async Task<UpdateProductResponse> Do(UpdateProductRequest request)
         {
             var product = _productManager.GetProductById(request.Id, x => x);
-
             product.Name = request.Name;
             product.Value = request.Value;
             product.Description = request.Description;
 
-            if (product.ProductImages.Count != 0)
+            var mainImage = product.ProductImages.FirstOrDefault();
+
+            foreach (var image in request.ProductImages)
             {
-                var mainImage = product.ProductImages.FirstOrDefault();
-                var requestMainImage = request.ProductImages.FirstOrDefault(x => x.Type == "main");
-                if (requestMainImage != null)
+                if (product.ProductImages.Any(x => x.Type == image.Type))
                 {
-                    mainImage.Name = requestMainImage.Name;
-                    mainImage.RelativePath = requestMainImage.RelativePath;
-                    mainImage.GlobalPath = requestMainImage.GlobalPath;
-                    mainImage.Length = requestMainImage.Length;
-                    mainImage.Type = "main";
+                    var retriveImage = product.ProductImages.FirstOrDefault(x => x.Type == image.Type);
+                    retriveImage.Name = image.Name;
+                    await _productManager.AddProductImage(retriveImage);
                 }
-            }
-            else
-            {
-                var requestMainImage = request.ProductImages.FirstOrDefault(x => x.Type == "main");
-                if (requestMainImage != null)
+                else
                 {
                     ProductImage productImage = new ProductImage();
                     productImage.Id = Guid.NewGuid();
                     productImage.ProductId = product.Id;
-                    productImage.Name = requestMainImage.Name;
-                    productImage.GlobalPath = requestMainImage.GlobalPath;
-                    productImage.RelativePath = requestMainImage.RelativePath;
-                    productImage.Type = "main";
+                    productImage.Name = image.Name;
+                    productImage.GlobalPath = image.GlobalPath;
+                    productImage.RelativePath = image.RelativePath;
+                    productImage.Type = image.Type;
                     await _productManager.AddProductImage(productImage);
                 }
+             
             }
 
             if (await _productManager.UpdateProduct(product) <= 0)
             {
                 throw new Exception("Failed to create product");
             }
-
 
             return new UpdateProductResponse
             {
