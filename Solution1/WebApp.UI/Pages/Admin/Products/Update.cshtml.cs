@@ -87,7 +87,7 @@ namespace WebApp.UI.Pages.Products
             {
                 var save_path = Path.Combine(_env.WebRootPath, Input.FrontImage.FileName);
                 using var fileStream = new FileStream(save_path, FileMode.Create, FileAccess.Write);
-                Input.File.CopyTo(fileStream);
+                Input.FrontImage.CopyTo(fileStream);
                 productImages.Add(new ProductImage
                 {
                     Name = Input.FrontImage.FileName,
@@ -101,7 +101,7 @@ namespace WebApp.UI.Pages.Products
             {
                 var save_path = Path.Combine(_env.WebRootPath, Input.BackImage.FileName);
                 using var fileStream = new FileStream(save_path, FileMode.Create, FileAccess.Write);
-                Input.File.CopyTo(fileStream);
+                Input.BackImage.CopyTo(fileStream);
                 productImages.Add(new ProductImage
                 {
                     Name = Input.BackImage.FileName,
@@ -115,7 +115,7 @@ namespace WebApp.UI.Pages.Products
             {
                 var save_path = Path.Combine(_env.WebRootPath, Input.PackingImage.FileName);
                 using var fileStream = new FileStream(save_path, FileMode.Create, FileAccess.Write);
-                Input.File.CopyTo(fileStream);
+                Input.PackingImage.CopyTo(fileStream);
                 productImages.Add(new ProductImage
                 {
                     Name = Input.PackingImage.FileName,

@@ -24,8 +24,7 @@ namespace WebApp.Api.Controllers
            Ok(getProduct.Do(id));
 
         [HttpGet("api/Products/GetProductByName")]
-        public IActionResult GetProductByName(string name,
-          [FromServices] GetProduct getProduct)
+        public IActionResult GetProductByName(string name, [FromServices] GetProduct getProduct)
         {
             return Ok(getProduct.Do(name));
         }

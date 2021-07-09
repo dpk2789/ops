@@ -11,7 +11,7 @@
             <div class="card">
                 @if (product.ProductImages != null)
                 {
-                    <img src="@product.ProductImages.FirstOrDefault()?.RelativePath" class="card-img-top" alt="...">
+                    <img src="@product.ProductImages.FirstOrDefault(x=>x.Type=="main")?.RelativePath" class="card-img-top" style="width:500px;height:500px" alt="...">
                 }
 
                 <div class="card-body">

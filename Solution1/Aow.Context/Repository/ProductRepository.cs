@@ -28,6 +28,11 @@ namespace Aow.Context.Repository
             _ctx.ProductImages.Add(image);
             return _ctx.SaveChangesAsync();
         }
+        public Task<int> UpdateProductImage(ProductImage image)
+        {
+            _ctx.ProductImages.Update(image);
+            return _ctx.SaveChangesAsync();
+        }
 
         public Task<int> DeleteProduct(Guid id)
         {
