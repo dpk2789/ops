@@ -30,6 +30,7 @@ namespace Aow.Application.ProductAdmin
                     Id = y.Id,
                     Name = y.Name,
                     RelativePath = y.RelativePath,
+                    Type=y.Type
                 }),
             });
 
