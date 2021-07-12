@@ -3,101 +3,58 @@
 @{
     ViewData["Title"] = "Home page";
 }
-<h1 class="display-1">Buy Best Packaging Boxes here <br /> !! And Make your business grow .</h1>
-<div class="row row-cols-1 row-cols-md-2 g-4">
-    @foreach (var product in Model.Products)
-    {
-        <div class="col">
-            <div class="card">
-                @if (product.ProductImages != null)
-                {
-                    <img src="@product.ProductImages.FirstOrDefault(x=>x.Type=="main")?.RelativePath" class="card-img-top" style="width:500px;height:500px" alt="...">
-                }
+<section class="section-intro padding-y-sm">
+    <div class="container">
 
-                <div class="card-body">
-                    <h5 class="card-title">@product.Name</h5>
-                    <p class="card-text">
-                        @product.Description
-                    </p>
-                    @{ if (User.Identity.IsAuthenticated)
-                        {
-                            <button type="button" onclick="addOneToCart(event)" id="@product.Id" data-product-id="@product.Id" data-user-id="@User.Identity.Name" class="btn btn-success">Add To Cart</button>
-                        }
-                        else
-                        {
+        <div class="intro-banner-wrap">
+            <h1 class="display-1">Buy Best Packaging Boxes here </h1>
+            <img src="~/images/banner1.jpg" class="img-fluid rounded" style="width:1000px;height:400px" />
+        </div>
 
-                            if (product.IsInCart == true)
-                            {
-                                <button type="button" disabled id="@product.Id" data-product-id="@product.Id" class="btn btn-success">Add To Cart</button>
-                            }
-                            else
-                            {
-                                <button type="button" onclick="addProductToCartSession(event)" id="@product.Id" data-product-id="@product.Id"
-                                        data-productname="@product.Name" class="btn btn-success">
-                                    Add To Cart
-                                </button>
-                            }
-                        }
+    </div> <!-- container //  -->
+</section>
+
+<!-- ========================= SECTION MAIN ========================= -->
+<section class="section-main bg padding-y">
+    <div class="container">
+
+        <!-- ========================= SECTION  ========================= -->
+        <section class="section-name padding-y-sm">
+            <div class="container">
+
+                <header class="section-heading">
+                    <a href="#" class="btn btn-outline-primary float-right">See all</a>
+                    <h3 class="section-title">Popular products</h3>
+                </header><!-- sect-heading -->
+
+
+                <div class="row">
+                    @foreach (var product in Model.Products)
+                    {
+                        <div class="col-md-3">
+                            <div href="#" class="card card-product-grid">
+                                <a asp-page="Product" asp-route-name="@product.Name.Replace(" ", "-")" class="img-wrap">
+                                    @if (product.ProductImages != null)
+                                    {
+                                        <img src="@product.ProductImages.FirstOrDefault(x=>x.Type=="main")?.RelativePath"
+                                             class="card-img-top" style="width:280px;height:220px" alt="...">
+                                    }
+                                </a>
+                                <figcaption class="info-wrap">
+                                    <a href="#" class="title">@product.Name</a>
+                                    <div class="price mt-1">Rs. @product.Value</div> <!-- price-wrap.// -->
+                                </figcaption>
+                            </div>
+                        </div> <!-- col.// -->
                     }
 
-                    <a asp-page="Product" asp-route-name="@product.Name.Replace(" ", "-")" class="btn btn-info">See Details</a>
-                </div>
-            </div>
-        </div>
-    }
-</div>
 
-@section scripts {
+                </div> <!-- row.// -->
 
-    <script>
-        var formData = {
-            "productId": "",
-            "name": "",
-            "qty": 1,
-            "value": 0,
-            "userId": ""
-        };
-        // var apiUrl = "https://localhost:44347";
-       // var apiUrl = "http://api.robustpackagingeshop.com";
-        var apiUrl = '@Model.ApiUrl';
-        let addOneToCart = function (e) {
-            let productId = e.target.dataset.productId;
-            let userName = e.target.dataset.userId;
-            this.formData.productId = productId;
-            this.formData.userId = userName;
-           // alert(productId);
-            axios.post(apiUrl + "/api/Cart/addtocart", this.formData)
-                .then(res => {
-                    console.log(res.data);
-                    let button = document.getElementById(productId);
-                    button.disabled = true;
-                })
-                .catch(err => {
-                    alert(err.error);
-                })
-        };
+            </div><!-- container // -->
+        </section>
+        <!-- ========================= SECTION  END// ========================= -->
 
-        let addProductToCartSession = function (e) {
-            let productId = e.target.dataset.productId;
-            let productName = e.target.dataset.productname;
-            this.formData.productId = productId;
-            this.formData.name = productName;
-            this.formData.qty = 1;
-            axios({
-                url: "/UserAccount/AddOneProductToCartSession",
-                method: "post",
-                data: this.formData,
-                headers: {
-                    'Content-Type': "application/json"
-                }
-            }).then(res => {
-                console.log(res.data);
-                let button = document.getElementById(productId);
-                button.disabled = true;
-            })
-                .catch(err => {
-                    alert(err.error);
-                })
-        };
-    </script>
-}
+    </div> <!-- container //  -->
+</section>
+<!-- ========================= SECTION MAIN END// ========================= -->

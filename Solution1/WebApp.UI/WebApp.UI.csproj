@@ -12,6 +12,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\fonts\fontawesome\.DS_Store" />
+    <None Include="wwwroot\fonts\fontawesome\webfonts\fa-brands-400.svg" />
+    <None Include="wwwroot\fonts\fontawesome\webfonts\fa-brands-400.woff2" />
+    <None Include="wwwroot\fonts\fontawesome\webfonts\fa-regular-400.svg" />
+    <None Include="wwwroot\fonts\fontawesome\webfonts\fa-regular-400.woff2" />
+    <None Include="wwwroot\fonts\fontawesome\webfonts\fa-solid-900.svg" />
+    <None Include="wwwroot\fonts\fontawesome\webfonts\fa-solid-900.woff2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.15" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
     <PackageReference Include="RazorPay.Core" Version="1.0.2" />

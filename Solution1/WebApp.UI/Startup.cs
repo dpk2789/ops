@@ -30,7 +30,11 @@ namespace WebApp.UI
             });
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
-            services.AddRazorPages();
+            services.AddRazorPages(options =>
+            {
+                options.Conventions.AddPageRoute("/Sitemap", "sitemap.xml");
+            });
+
             services
                 .AddMvc(o => o.EnableEndpointRouting = false);
             services.AddTransient<IEmailSender, EmailSender>(i =>
@@ -48,7 +52,7 @@ namespace WebApp.UI
                 options.Cookie.Name = "Cart";
                 options.Cookie.MaxAge = TimeSpan.FromMinutes(20);
             });
-            services.AddScoped<ISessionManager, SessionManager>();            
+            services.AddScoped<ISessionManager, SessionManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,7 +60,7 @@ namespace WebApp.UI
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();                
+                app.UseDeveloperExceptionPage();
             }
             else
             {
@@ -100,6 +104,7 @@ namespace WebApp.UI
             app.UseSession();
 
             app.UseMvcWithDefaultRoute();
+
             //app.UseEndpoints(endpoints =>
             //{
             //    endpoints.MapRazorPages();

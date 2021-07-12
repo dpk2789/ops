@@ -16,10 +16,9 @@ namespace WebApp.UI.Pages
     {
         private ISessionManager _sessionManager;
         public string ApiUrl { get; }
-        public IndexModel(ISessionManager sessionManager, ILogger<IndexModel> logger)
+        public IndexModel(ISessionManager sessionManager)
         {
-            _sessionManager = sessionManager;
-            _logger = logger;
+            _sessionManager = sessionManager;           
             ApiUrl = ApiUrls.Rootlocal;
         }
 
