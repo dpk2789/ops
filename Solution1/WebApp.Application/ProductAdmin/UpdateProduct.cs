@@ -55,6 +55,7 @@ namespace Aow.Application.ProductAdmin
                 {
                     var retriveImage = product.ProductImages.FirstOrDefault(x => x.Type == image.Type);
                     retriveImage.Name = image.Name;
+                    retriveImage.Type = image.Type;
                     retriveImage.GlobalPath = image.GlobalPath;
                     retriveImage.RelativePath = image.RelativePath;
                     await _productManager.UpdateProductImage(retriveImage);
