@@ -100,18 +100,32 @@ namespace WebApp.RazorPages.Areas.Identity.Pages.Account
                 //postTask.Wait();
                 string result = postTask.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 var securitytoken = JsonConvert.DeserializeObject<Token>(result);
-                var test = ValidateToken(securitytoken.token);
-                var rolesClaim = test.Claims.FirstOrDefault(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value;
+
+
+                var jwtToken = new JwtSecurityToken(securitytoken.token);
+                var role = jwtToken.Claims.FirstOrDefault(x => x.Type == "role");
+
+                //var test = ValidateToken(securitytoken.token);
+                //var rolesClaim = test.Claims.FirstOrDefault(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value;
                 //var rolesClaim = test.Claims.Where(c => c.Type == ClaimsIdentity.DefaultRoleClaimType).FirstOrDefault();
-                if (rolesClaim == null)
+                var claims = new List<Claim>();
+                if (role == null)
                 {
-                    rolesClaim = "customer";
+                    claims.Add(new Claim(ClaimTypes.Name, Input.Email));
+                    claims.Add(new Claim("UserRoleClaim", "customer"));
+                    claims.Add(new Claim("AcessToken", string.Format("{0}", securitytoken.token)));
+                }
+                else
+                {
+                    claims.Add(new Claim(ClaimTypes.Name, Input.Email));
+                    claims.Add(new Claim("UserRoleClaim", role.Value));
+                    claims.Add(new Claim("AcessToken", string.Format("{0}", securitytoken.token)));
                 }
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", securitytoken.token);
                 //HTTP get user info
-                Uri userinfo = new Uri("http://api.robustpackagingeshop.com/weatherforecast");
-                var getUserInfo = await client.GetAsync(userinfo);
-                string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                //Uri userinfo = new Uri("http://api.robustpackagingeshop.com/weatherforecast");
+                //var getUserInfo = await client.GetAsync(userinfo);
+                //string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 //  var data = JsonConvert.DeserializeObject<UserInfo>(resultuerinfo);
 
 
@@ -122,12 +136,7 @@ namespace WebApp.RazorPages.Areas.Identity.Pages.Account
                     ExpiresUtc = DateTime.UtcNow.AddHours((securitytoken.expires_in))
                 };
 
-                var claims = new[]
-                {
-                    new Claim(ClaimTypes.Name, Input.Email),
-                    new Claim("UserRoleClaim",rolesClaim),
-                    new Claim("AcessToken", string.Format("{0}", securitytoken.token)),
-                    };
+
 
                 var claimsIdentity = new ClaimsIdentity(claims, "ApplicationCookie");
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
