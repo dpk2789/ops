@@ -99,7 +99,7 @@ namespace WebApp.UI.Controllers
             var getProductsUri = new Uri(ApiUrls.Product.GetProducts);
 
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
-
+            var userAccessRole = User.Claims.Where(x => x.Type == "role").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
 
             var getUserInfo = await client.GetAsync(getProductsUri);

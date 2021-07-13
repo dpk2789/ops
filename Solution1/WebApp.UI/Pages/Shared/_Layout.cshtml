@@ -68,17 +68,25 @@
                     <div class="col-lg-4 col-sm-6 col-12">
                         <div class="widgets-wrap float-md-right">
                             <div class="widget-header  mr-3">
-                                <a href="#" class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i></a>
+                                <a asp-page="/Cart" class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i></a>
                                 <span class="badge badge-pill badge-danger notify">0</span>
                             </div>
                             <div class="widget-header icontext">
                                 <a href="#" class="icon icon-sm rounded-circle border"><i class="fa fa-user"></i></a>
                                 <div class="text">
-                                    <span class="text-muted">Welcome!</span>
-                                    <div>
-                                        <a asp-page="Account/Login">Sign in</a> |
-                                        <a asp-page="Account/Register"> Register</a>
-                                    </div>
+                                    <span class="text-muted">Welcome! @User.Identity.Name</span>
+                                    @if (Context.User.Identity.IsAuthenticated)
+                                    {
+                                        <a class="nav-link text-dark" asp-controller="UserAccount" asp-action="Logout">Sign Out</a>
+                                    }
+                                    else
+                                    {
+                                        <div>
+                                            <a asp-page="Account/Login">Sign in</a> |
+                                            <a asp-page="Account/Register"> Register</a>
+                                        </div>
+                                    }
+
                                 </div>
                             </div>
 
@@ -113,17 +121,24 @@
                         <a class="nav-link" href="#">Partnership</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Baby &amp Toys</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Fitness sport</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="#">Clothing</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Furnitures</a>
-                    </li>
+                    @if (Context.User.Identity.IsAuthenticated)
+                    {
+                        var userAccessToken = User.Claims.FirstOrDefault(x => x.Type == "UserRoleClaim")?.Value;
+                        if (userAccessToken == "admin")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="Admin/Products/Index">Products</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="/Admin/Products/Index">
+                                    Admin
+                                </a>
+                            </li>
+                        }
+
+                    }
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"> More</a>
                         <div class="dropdown-menu">
