@@ -49,17 +49,12 @@ namespace WebApp.RazorPages.Areas.Identity.Pages.Account
             public bool RememberMe { get; set; }
         }
 
-        public IActionResult OnGetAsync(string returnUrl = null)
+        public IActionResult OnGetAsync()
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
-
-            returnUrl = returnUrl ?? Url.Content("~/");
-
-
-            ReturnUrl = returnUrl;
             return Page();
         }
 

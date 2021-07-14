@@ -14,29 +14,6 @@ namespace Aow.Application.ProductAdmin
         {
             _productRepository = productRepository;
         }
-
-        public IEnumerable<ProductViewModelResponse> Do()
-        {
-            var list = _productRepository.GetProductsWithStock(x => new ProductViewModelResponse
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Value = x.Value,
-                Description = x.Description,
-
-                ProductImages = x.ProductImages.Select(y => new ProductImageResponse
-                {
-                    ProductId = y.ProductId,
-                    Id = y.Id,
-                    Name = y.Name,
-                    RelativePath = y.RelativePath,
-                    Type=y.Type
-                }),
-            });
-
-            return list;
-        }
-
         public class ProductViewModelResponse
         {
             public Guid Id { get; set; }
@@ -57,5 +34,28 @@ namespace Aow.Application.ProductAdmin
             public string Type { get; set; }
             public string Extention { get; set; }
         }
+        public IEnumerable<ProductViewModelResponse> Do()
+        {
+            var list = _productRepository.GetProductsWithStock(x => new ProductViewModelResponse
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Value = x.Value,
+                Description = x.Description,
+
+                ProductImages = x.ProductImages.Select(y => new ProductImageResponse
+                {
+                    ProductId = y.ProductId,
+                    Id = y.Id,
+                    Name = y.Name,
+                    RelativePath = y.RelativePath,
+                    Type = y.Type
+                }),
+            });
+
+            return list;
+        }
+
+
     }
 }

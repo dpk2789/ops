@@ -17,10 +17,10 @@ namespace Aow.Context.Repository
             _ctx = ctx;
         }
 
-        public IEnumerable<TResult> GetCartProducts<TResult>(string userId , Func<CartProduct, TResult> selector)
+        public IEnumerable<TResult> GetCartProducts<TResult>(string userId, Func<CartProduct, TResult> selector)
         {
             return _ctx.CartProducts
-                .Include(x => x.Product)
+                .Include(x => x.Product).ThenInclude(x => x.ProductImages)
                 .Where(x => x.UserId == userId)
                 .Select(selector)
                 .ToList();
@@ -32,7 +32,7 @@ namespace Aow.Context.Repository
             return _ctx.SaveChangesAsync();
         }
 
-        public Task<int> DeleteCart(Guid productId , string userId)
+        public Task<int> DeleteCart(Guid productId, string userId)
         {
             var cartProduct = _ctx.CartProducts
                .FirstOrDefault(x => x.ProductId == productId
@@ -59,15 +59,15 @@ namespace Aow.Context.Repository
                 cartProduct.Qty += qty;
                 _ctx.CartProducts.UpdateRange(cartProduct);
             }
-             else
-            {               
+            else
+            {
                 _ctx.CartProducts.Add(new CartProduct
                 {
                     ProductId = productId,
                     UserId = userId,
-                    Qty = qty,                   
+                    Qty = qty,
                 });
-            }            
+            }
             return _ctx.SaveChangesAsync();
         }
     }

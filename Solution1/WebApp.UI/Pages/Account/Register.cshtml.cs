@@ -59,24 +59,19 @@ namespace WebApp.UI.Pages.Account
         }
 
 
-        public IActionResult OnGetAsync(string returnUrl = null)
+        public IActionResult OnGetAsync(string returnUrl)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
-
-            returnUrl = returnUrl ?? Url.Content("~/");
-
-
-            ReturnUrl = returnUrl;
+           
             return Page();
         }
 
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
-        {
-            returnUrl ??= Url.Content("~/");
+        public async Task<IActionResult> OnPostAsync()
+        {            
             if (!ModelState.IsValid) return Page();
             using var client = new HttpClient();
             var u = new Uri(ApiUrls.Identity.Register);
