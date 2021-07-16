@@ -71,7 +71,8 @@ namespace WebApp.UI.Helpers
                     Id = request.ProductId,
                     Name = request.Name,
                     ProductId = request.ProductId,
-                    Qty = request.Qty
+                    Qty = request.Qty,
+                    RelativePath = request.RelativePath
                 });
             }
 

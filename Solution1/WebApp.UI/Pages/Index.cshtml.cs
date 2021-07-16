@@ -68,7 +68,7 @@ namespace WebApp.UI.Pages
 
             foreach (var product in Products)
             {
-                if (cartList != null)
+                if (cartList.Count() != 0)
                 {
                     var productViewModels = cartList.ToList();
                     if (productViewModels.Any(x => x.Id == product.Id))

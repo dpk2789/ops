@@ -59,20 +59,22 @@ namespace WebApp.UI.Pages
                 Value = x.Value,
                 Id = x.ProductId,
             });
-
-            foreach (var product in cartList)
+            if (cartList.Count() != 0)
             {
-                if (cartList != null)
+                foreach (var product in cartList)
                 {
                     var productViewModels = cartList.ToList();
                     if (productViewModels.Any(x => x.Id == Input.Id))
                     {
                         product.IsInCart = true;
+                        Input.IsInCart = true;
                     }
                     else
                     {
                         product.IsInCart = false;
+                        Input.IsInCart = false;
                     }
+
                 }
             }
             if (data == null)

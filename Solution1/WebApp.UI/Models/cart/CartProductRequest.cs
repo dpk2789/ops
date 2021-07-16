@@ -8,5 +8,6 @@ namespace WebApp.UI.Models.cart
         public string Name { get; set; }     
         public int Qty { get; set; }
         public decimal Value { get; set; }
+        public string RelativePath { get; set; }
     }
 }
