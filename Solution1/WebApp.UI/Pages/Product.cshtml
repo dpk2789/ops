@@ -103,7 +103,7 @@
                             if (User.Identity.IsAuthenticated)
                             {
                                 <button type="button" onclick="addOneToCart(event)" id="@Model.Input.Id" data-product-id="@Model.Input.Id"
-                                        data-user-id="@User.Identity.Name" class="btn btn-success">
+                                    data-user-id="@User.Identity.Name" class="btn btn-success">
                                     Add To Cart
                                 </button>
                             }
@@ -112,7 +112,7 @@
                                 if (Model.Input.IsInCart == true)
                                 {
                                     <button type="button" disabled
-                                            class="btn btn-success">
+                                    class="btn btn-success">
                                         <span class="text">Buy Now</span> <i class="fas fa-shopping-cart"></i>
                                     </button>
                                     <a class="btn btn-success" asp-page="/Cart">
@@ -121,13 +121,24 @@
                                 }
                                 else
                                 {
-                                    <button type="button" onclick="addProductToCartSession(event)" id="@Model.Input.Id"
-                                            data-product-id="@Model.Input.Id"
-                                            data-productname="@Model.Input.Name"
-                                            data-relativePath="@Model.Input.ProductImages.FirstOrDefault(x=>x.Type=="main")?.RelativePath"
-                                            class="btn btn-outline-primary">
-                                        <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i>
+                                    <button type="button" onclick="addProductToCartSession(event)" id="startDeviceScan"
+                                    data-product-id="@Model.Input.Id"
+                                    data-productname="@Model.Input.Name"
+                                    data-relativepath="@Model.Input.ProductImages.FirstOrDefault(x=>x.Type=="main")?.RelativePath"
+                                    class="btn btn-outline-primary">
+                                        Add to cart <i class="fas fa-shopping-cart"></i>
                                     </button>
+
+                                    <div style="display:none" id="gotoCart">
+                                        <button type="button" disabled
+                                        class="btn btn-success">
+                                            <span class="text">Buy Now</span> <i class="fas fa-shopping-cart"></i>
+                                        </button>
+                                        <a class="btn btn-success" asp-page="/Cart">
+                                            <span class="text">Go To Cart</span> <i class="fas fa-shopping-cart"></i>
+                                        </a>
+
+                                    </div>
                                 }
                             }
                         }
@@ -139,61 +150,71 @@
     </div>
 </section>
 
+
+
 @section scripts {
 
-    <script>
-        var formData = {
-            "productId": "",
-            "name": "",
-            "qty": 1,
-            "value": 0,
-            "userId": "",
-            "relativePath": "",
-        };
-        // var apiUrl = "https://localhost:44347";
-       // var apiUrl = "http://api.robustpackagingeshop.com";
-        var apiUrl = '@Model.ApiUrl';
-        let addOneToCart = function (e) {
-            let productId = e.target.dataset.productId;
-            let userName = e.target.dataset.userId;
-            this.formData.productId = productId;
-            this.formData.userId = userName;
-           // alert(productId);
-            axios.post(apiUrl + "/api/Cart/addtocart", this.formData)
-                .then(res => {
-                    console.log(res.data);
-                    let button = document.getElementById(productId);
-                    button.disabled = true;
-                })
-                .catch(err => {
-                    alert(err.error);
-                })
-        };
-
-        let addProductToCartSession = function (e) {
-            let productId = e.target.dataset.productId;
-            let productName = e.target.dataset.productname;
-            let relativePath = e.target.dataset.relativePath;
-            this.formData.productId = productId;
-            this.formData.name = productName;
-            this.formData.relativePath = relativePath;
-            this.formData.qty = 1;
-            alert(relativePath);
-            axios({
-                url: "/UserAccount/AddOneProductToCartSession",
-                method: "post",
-                data: this.formData,
-                headers: {
-                    'Content-Type': "application/json"
-                }
-            }).then(res => {
-                console.log(res.data);
-                let button = document.getElementById(productId);
-                button.disabled = true;
-            })
-                .catch(err => {
-                    alert(err.error);
-                })
-        };
-    </script>
+<script>
+     var formData = {
+         "productId": "",
+         "name": "",
+         "qty": 1,
+         "value": 0,
+         "userId": "",
+         "relativePath": "",
+     };
+     // var apiUrl = "https://localhost:44347";
+    // var apiUrl = "http://api.robustpackagingeshop.com";
+     var apiUrl = '@Model.ApiUrl';
+     let addOneToCart = function (e) {
+         let productId = e.target.dataset.productId;
+         let userName = e.target.dataset.userId;
+         this.formData.productId = productId;
+         this.formData.userId = userName;
+        // alert(productId);
+         axios.post(apiUrl + "/api/Cart/addtocart", this.formData)
+             .then(res => {
+                 console.log(res.data);
+                 let button = document.getElementById(productId);
+                 button.disabled = true;
+             })
+             .catch(err => {
+                 alert(err.error);
+             })
+     };
+     //$( "#startDeviceScan" ).on( "click", addProductToCartSession(e));
+        function addProductToCartSession (e) {
+             e.preventDefault();
+         let productId = e.target.dataset.productId;
+         let productName = e.target.dataset.productname;
+         let relativePath = e.target.dataset.relativepath;
+         this.formData.productId = productId;
+         this.formData.name = productName;
+         this.formData.relativePath = relativePath;
+         this.formData.qty = 1;
+         if(productId===undefined)
+         return false;
+         alert(relativePath);
+         axios({
+             url: "/UserAccount/AddOneProductToCartSession",
+             method: "post",
+             data: this.formData,
+             headers: {
+                 'Content-Type': "application/json"
+             }
+         }).then(res => {
+             console.log(res.data);
+             let button =$("#startDeviceScan");
+            // button.disabled = true;
+             button.css("display", "none");
+             let button2 = $("#gotoCart");
+             button2.css("display", "block");
+           //  button2.innerHTML = "show";
+           //  button2.show();
+         })
+             .catch(err => {
+                 alert(err.error);
+             })
+     };
+</script>
 }

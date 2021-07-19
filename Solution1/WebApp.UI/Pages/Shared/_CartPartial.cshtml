@@ -38,26 +38,26 @@
                             @if (User.Identity.IsAuthenticated)
                             {
                                 <button class="btn btn-sm" type="button"
-                                        onclick="removeOneFromCart(event)"
-                                        data-product-id="@product.ProductId" data-user-id="@User.Identity.Name">
+                                onclick="removeOneFromCart(event)"
+                                data-product-id="@product.ProductId" data-user-id="@User.Identity.Name">
                                     -
                                 </button>
                                 <a href="#" class="border">@product.Qty</a>
                                 <button class="btn btn-sm" type="button"
-                                        onclick="addOneToCart(event)"
-                                        data-product-id="@product.ProductId" data-user-id="@User.Identity.Name">
+                                onclick="addOneToCart(event)"
+                                data-product-id="@product.ProductId" data-user-id="@User.Identity.Name">
                                     +
                                 </button>
                             }
                             else
                             {
                                 <button class="button" type="button"
-                                        onclick="removeOneFromCartSession(event)" data-product-id="@product.ProductId" data-quantity="@product.Qty">
+                                onclick="removeOneFromCartSession(event)" data-product-id="@product.ProductId" data-quantity="@product.Qty">
                                     -
                                 </button>
                                 <a href="#" class="border">@product.Qty</a>
                                 <button class="button" type="button"
-                                        onclick="addOneToCartSession(event)" data-product-id="@product.ProductId" data-quantity="@product.Qty">
+                                onclick="addOneToCartSession(event)" data-product-id="@product.ProductId" data-quantity="@product.Qty">
                                     +
                                 </button>
                             }
@@ -68,11 +68,11 @@
                                 <var class="price">@product.Value</var>
                                 <small class="text-muted"> ₹@product.Value each </small>
                             </div> <!-- price-wrap .// -->
-                        </td>
+                    </td>
                         <td class="text-right">
                             <a data-original-title="Save to Wishlist" title="" href="" class="btn btn-light" data-toggle="tooltip"> <i class="fa fa-heart"></i></a>
                             <button onclick="removeFromCart(event)"
-                                    data-product-id="@product.ProductId" data-user-id="@User.Identity.Name" class="btn btn-light">
+                                data-product-id="@product.ProductId" data-user-id="@User.Identity.Name" class="btn btn-light">
                                 Remove
                             </button>
                         </td>
@@ -130,107 +130,105 @@
         </div> <!-- card-body.// -->
     </div>  <!-- card .// -->
 </aside> <!-- col.// -->
-
-
 @*<div class="row" id="cart-main">
     <div class="col-md-8 cart">
-        <div class="title">
-            <div class="row">
-                <div class="col">
-                    <h4><b>Shopping Cart</b></h4>
-                </div>
-                <div class="col align-self-center text-right text-muted">3 items</div>
-            </div>
-        </div>
-        @foreach (var product in Model.CartList)
-        {
-            <div class="row border-top border-bottom">
-                <div class="row main align-items-center">
-                    <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/1GrakTl.jpg"></div>
-                    <div class="col">
-                        <div class="row text-muted">Shirt</div>
-                        <div class="row">@product.Name </div>
-                        <span class="money">₹@product.Value</span>
-                    </div>
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <div class="col">
-                            <button class="button" type="button"
-                                    onclick="removeOneFromCart(event)"
-                                    data-product-id="@product.ProductId" data-user-id="@User.Identity.Name">
-                                -
-                            </button>
-                            <a href="#" class="border">@product.Qty</a>
-                            <button class="button" type="button"
-                                    onclick="addOneToCart(event)"
-                                    data-product-id="@product.ProductId" data-user-id="@User.Identity.Name">
-                                +
-                            </button>
-                        </div>
-                        <div class="col">
-                            @{
-                                var productAmt = (@product.Qty * @product.Value);
+    <div class="title">
+    <div class="row">
+    <div class="col">
+    <h4><b>Shopping Cart</b></h4>
+    </div>
+    <div class="col align-self-center text-right text-muted">3 items</div>
+    </div>
+    </div>
+    @foreach (var product in Model.CartList)
+    {
+    <div class="row border-top border-bottom">
+    <div class="row main align-items-center">
+    <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/1GrakTl.jpg"></div>
+    <div class="col">
+    <div class="row text-muted">Shirt</div>
+    <div class="row">@product.Name </div>
+    <span class="money">₹@product.Value</span>
+    </div>
+    @if (User.Identity.IsAuthenticated)
+    {
+    <div class="col">
+    <button class="button" type="button"
+    onclick="removeOneFromCart(event)"
+    data-product-id="@product.ProductId" data-user-id="@User.Identity.Name">
+    -
+    </button>
+    <a href="#" class="border">@product.Qty</a>
+    <button class="button" type="button"
+    onclick="addOneToCart(event)"
+    data-product-id="@product.ProductId" data-user-id="@User.Identity.Name">
+    +
+    </button>
+    </div>
+    <div class="col">
+    @{
+    var productAmt = (@product.Qty * @product.Value);
 
-                            } ₹ @productAmt
-                            <button onclick="removeFromCart(event)"
-                                    data-product-id="@product.ProductId" data-user-id="@User.Identity.Name" class="button">
-                                X
-                            </button>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="col">
-                            <button class="button" type="button"
-                                    onclick="removeOneFromCartSession(event)" data-product-id="@product.ProductId" data-quantity="@product.Qty">
-                                -
-                            </button>
-                            <a href="#" class="border">@product.Qty</a>
-                            <button class="button" type="button"
-                                    onclick="addOneToCartSession(event)" data-product-id="@product.ProductId" data-quantity="@product.Qty">
-                                +
-                            </button>
-                        </div>
-                        <div class="col">
-                            @{
-                                var productAmt = (@product.Qty * @product.Value);
+    } ₹ @productAmt
+    <button onclick="removeFromCart(event)"
+    data-product-id="@product.ProductId" data-user-id="@User.Identity.Name" class="button">
+    X
+    </button>
+    </div>
+    }
+    else
+    {
+    <div class="col">
+    <button class="button" type="button"
+    onclick="removeOneFromCartSession(event)" data-product-id="@product.ProductId" data-quantity="@product.Qty">
+    -
+    </button>
+    <a href="#" class="border">@product.Qty</a>
+    <button class="button" type="button"
+    onclick="addOneToCartSession(event)" data-product-id="@product.ProductId" data-quantity="@product.Qty">
+    +
+    </button>
+    </div>
+    <div class="col">
+    @{
+    var productAmt = (@product.Qty * @product.Value);
 
-                            } ₹ @productAmt
-                            <button onclick="removeProductFromCartSession(event)" type="button"
-                                    data-product-id="@product.ProductId" class="button">
-                                X
-                            </button>
-                        </div>
-                    }
+    } ₹ @productAmt
+    <button onclick="removeProductFromCartSession(event)" type="button"
+    data-product-id="@product.ProductId" class="button">
+    X
+    </button>
+    </div>
+    }
 
-                </div>
+    </div>
 
-            </div>
-        }
-        <div class="back-to-shop"><a href="/">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
+    </div>
+    }
+    <div class="back-to-shop"><a href="/">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
     </div>
     <div class="col-md-4 summary">
-        <div>
-            <h5><b>Summary</b></h5>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col" style="padding-left:0;">ITEMS 3</div>
-            <div class="col text-right">₹ @Model.GetTotalCharge() </div>
-        </div>
-        <form>
-            <p>SHIPPING</p> <select>
-                <option class="text-muted">Standard-Delivery- &euro;5.00</option>
-            </select>
-            <p>GIVE CODE</p> <input id="code" placeholder="Enter your code">
-        </form>
-        <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
-            <div class="col">TOTAL PRICE</div>
-            <div class="col text-right">₹ @Model.GetTotalCharge()</div>
-        </div>
-        @if (Model.CartList.Count() > 0)
-        {
-            <a asp-page="/Checkout/CustomerImformation" class="btn btn-success is-success">Checkout</a>
-        }
+    <div>
+    <h5><b>Summary</b></h5>
     </div>
-</div>*@
+    <hr>
+    <div class="row">
+    <div class="col" style="padding-left:0;">ITEMS 3</div>
+    <div class="col text-right">₹ @Model.GetTotalCharge() </div>
+    </div>
+    <form>
+    <p>SHIPPING</p> <select>
+    <option class="text-muted">Standard-Delivery- &euro;5.00</option>
+    </select>
+    <p>GIVE CODE</p> <input id="code" placeholder="Enter your code">
+    </form>
+    <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+    <div class="col">TOTAL PRICE</div>
+    <div class="col text-right">₹ @Model.GetTotalCharge()</div>
+    </div>
+    @if (Model.CartList.Count() > 0)
+    {
+    <a asp-page="/Checkout/CustomerImformation" class="btn btn-success is-success">Checkout</a>
+    }
+    </div>
+    </div>*@
