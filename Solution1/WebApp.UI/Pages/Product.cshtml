@@ -3,29 +3,51 @@
 @{
     ViewData["Title"] = Model.Input.Name;
 }
+<link rel='stylesheet' href='https://sachinchoolur.github.io/lightslider/dist/css/lightslider.css'>
+<style>
+    .card {
+        background-color: #fff;
+        padding: 14px;
+        border: none
+    }
+
+    .demo {
+        width: 100%
+    }
+
+
+    img {
+        display: block;
+        height: auto;
+        width: 100%
+    }
+</style>
 <section class="section-content padding-y bg">
     <div class="container">
         <div class="card">
             <div class="row no-gutters">
                 <aside class="col-md-6">
                     <article class="gallery-wrap">
-                        <div class="img-big-wrap">
-                            <a href="#">
-                                <img src="@Model.Input.ProductImages.FirstOrDefault(x=>x.Type=="main")?.RelativePath" class="card-img-top"
-                                     style="width:500px;height:500px">
-                            </a>
-                        </div> <!-- img-big-wrap.// -->
-                        <div class="thumbs-wrap">
-                            @{
-                                if (Model.Input.ProductImages != null)
-                                {
-                                    foreach (var image in Model.Input.ProductImages)
-                                    {
-                                        <a href="#" class="item-thumb"> <img src="@image.RelativePath" style="width:150px;height:100px"></a>
+                        <div class="card">
+                            <div class="demo">
+                                <ul id="lightSlider">
+                                    @{
+                                        if (Model.Input.ProductImages != null)
+                                        {
+                                            foreach (var image in Model.Input.ProductImages)
+                                            {
+                                                <li data-thumb="@image.RelativePath"> <img src="@image.RelativePath" style="height:500px" /> </li>
+
+                                            }
+                                        }
                                     }
-                                }
-                            }
-                        </div> <!-- thumbs-wrap.// -->
+
+                                </ul>
+                            </div>
+                        </div>
+
+
+
                     </article> <!-- gallery-wrap .end// -->
                 </aside>
                 <main class="col-md-6 border-left">
@@ -103,7 +125,7 @@
                             if (User.Identity.IsAuthenticated)
                             {
                                 <button type="button" onclick="addOneToCart(event)" id="@Model.Input.Id" data-product-id="@Model.Input.Id"
-                                    data-user-id="@User.Identity.Name" class="btn btn-success">
+                                        data-user-id="@User.Identity.Name" class="btn btn-success">
                                     Add To Cart
                                 </button>
                             }
@@ -112,7 +134,7 @@
                                 if (Model.Input.IsInCart == true)
                                 {
                                     <button type="button" disabled
-                                    class="btn btn-success">
+                                            class="btn btn-success">
                                         <span class="text">Buy Now</span> <i class="fas fa-shopping-cart"></i>
                                     </button>
                                     <a class="btn btn-success" asp-page="/Cart">
@@ -122,16 +144,16 @@
                                 else
                                 {
                                     <button type="button" onclick="addProductToCartSession(event)" id="startDeviceScan"
-                                    data-product-id="@Model.Input.Id"
-                                    data-productname="@Model.Input.Name"
-                                    data-relativepath="@Model.Input.ProductImages.FirstOrDefault(x=>x.Type=="main")?.RelativePath"
-                                    class="btn btn-outline-primary">
+                                            data-product-id="@Model.Input.Id"
+                                            data-productname="@Model.Input.Name"
+                                            data-relativepath="@Model.Input.ProductImages.FirstOrDefault(x=>x.Type=="main")?.RelativePath"
+                                            class="btn btn-outline-primary">
                                         Add to cart <i class="fas fa-shopping-cart"></i>
                                     </button>
 
                                     <div style="display:none" id="gotoCart">
                                         <button type="button" disabled
-                                        class="btn btn-success">
+                                                class="btn btn-success">
                                             <span class="text">Buy Now</span> <i class="fas fa-shopping-cart"></i>
                                         </button>
                                         <a class="btn btn-success" asp-page="/Cart">
@@ -153,8 +175,17 @@
 
 
 @section scripts {
-
-<script>
+    <script src='https://sachinchoolur.github.io/lightslider/dist/js/lightslider.js'></script>
+    <script>
+        $('#lightSlider').lightSlider({
+            gallery: true,
+            item: 1,
+            loop: true,
+            slideMargin: 0,
+            thumbItem: 9
+        });
+    </script>
+    <script>
      var formData = {
          "productId": "",
          "name": "",
@@ -216,5 +247,5 @@
                  alert(err.error);
              })
      };
-</script>
+    </script>
 }
